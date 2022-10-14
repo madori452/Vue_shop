@@ -1,0 +1,128 @@
+<template>
+<CustomLoading :active="isLoading"></CustomLoading>
+  <div class="container-fluid d-flex align-items-center justify-content-center px-0">
+    <p class="en-font title fs-3-lg fs-4-md mb-0">ABOUT US</p>
+    <p class="content en-font">以瑞典當地自然環境風土化為風格啟發，揀選天然有機原料組成純淨配方，堅持只給最好的。</p>
+    <img src="@/assets/Article/About.png" class="d-lg-block d-none w-100" alt="banner">
+    <img src="@/assets/Index/Carousel/03-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
+    <img src="@/assets/Index/Carousel/03-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
+  </div>
+  <div class="container mx-auto py-4 mt-4">
+    <nav aria-label="breadcrumb ">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item "><router-link to="/user/articles" class="text-black-50 text-decoration-none">所有文章</router-link></li>
+        <li class="breadcrumb-item active text-black-50 fw-bolder" aria-current="page">{{ article.title }}</li>
+      </ol>
+    </nav>
+    <div class="row pb-5">
+      <div class="col-lg-6">
+        <img :src="article.image" alt="product_pic" class="img-fluid">
+      </div>
+      <div class="col-lg-6 all-content">
+        <p class="tag en-font">{{article.tag}}</p>
+        <p class="fst-italic en-font">Author : {{article.author}}</p>
+        <p class="h5 mb-2 en-font article_title">{{article.title}}</p>
+        <p class="article_content text-900">{{article.content}}</p>
+      </div>
+    </div>
+  </div>
+
+</template>
+
+<style scoped lang="scss">
+@import '@/assets/scss/main.scss';
+.title{
+  position: absolute;
+  z-index: 2;
+  font-size: $text_titile;
+
+  @include phone{
+    font-size: 20px;
+  }
+}
+.article_title{
+  @include pad{
+    font-size: 18px;
+  }
+}
+p.content{
+  position: absolute;
+  z-index: 2;
+  font-size: 18px;
+  margin-top: 120px;
+  text-align: center;
+  width: 80%;
+  @include pad{
+    font-size: 16px;
+    padding: 0 50px;
+  }
+  @include phone{
+    font-size: 14px;
+  }
+}
+.tag{
+  background-color: $primary;
+  color: #fff;
+  width: 100px;
+  height: 32px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 16px;
+}
+.breadcrumb{
+  @include pad{
+    font-size: 14px;
+  }
+}
+.all-content{
+  @include pad{
+    margin-top: 20px;
+  }
+}
+.article_content{
+  line-height: 26px;
+  @include pad{
+    font-size: 14px;
+  }
+}
+</style>
+
+<script>
+
+export default {
+  data () {
+    return {
+      article: '',
+      id: '',
+      isLoading: false
+
+    }
+  },
+  components: {
+  },
+  inject: ['emitter'],
+  methods: {
+    getArticle (id) {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/article/${id}`
+      this.isLoading = true
+      this.$http.get(url).then((res) => {
+        if (res.data.success) {
+          this.isLoading = false
+          this.article = res.data.article
+        }
+      }).catch(err => {
+        this.$swal({
+          icon: 'error',
+          title: `${err.data.message}`
+        })
+      })
+    }
+  },
+
+  created () {
+    this.id = this.$route.params.articleId
+    this.getArticle(this.id)
+  }
+
+}
+</script>

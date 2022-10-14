@@ -1,0 +1,56 @@
+// color
+$primary: #A49D73 ;
+$secondary:#FCF8F3;
+
+// text-color
+$text_wh:#fff ;
+$text_bk:#2E2E2E;
+$text_800:#ccc;
+$text_900:#7e7c7c;
+
+// text-size
+$text_titile:32px;
+//Btn
+
+@mixin button-primary-border-index {
+    width: 120px;
+    height: 50px;
+    font-size: 18px;
+    color: $primary;
+    border: 2px solid $primary;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+}
+
+@mixin button-primary-cart {
+    width: 180px;
+    height: 48px;
+    font-size: 18px;
+    background-color: $primary;
+    color: #fff;
+    text-align: center;
+    line-height: 40px;
+    border: 0px;
+    cursor: pointer;
+}
+
+
+//media screen
+@mixin lg-screen{
+    @media (max-width:1024px) {
+        @content;
+    } 
+}
+
+@mixin pad{
+    @media (max-width:768px) {
+        @content;
+    } 
+}
+
+@mixin phone{
+    @media (max-width:512px) {
+        @content;
+    }   
+}

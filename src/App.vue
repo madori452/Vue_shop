@@ -1,30 +1,44 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
+
   <router-view/>
+  <Top></Top>
 </template>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+@import "./assets/all.scss";
+@import"./assets/scss/main.scss";
+@import url('https://fonts.googleapis.com/css2?family=Rufina&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap');
+body{
+  font-family: 'Noto Sans TC', sans-serif !important;
+  background-color: $secondary;
+  color: $text_bk;
+  overflow-x: hidden;
 }
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+*{
+  // border: 1px solid #ddd;
+}
+.modal-backdrop{
+  background-color: #0303039c;
+}
+.en-font{
+  font-family: 'Rufina', serif;
+}
+.navbar-nav .show > .nav-link, .navbar-nav .nav-link.active{
+  color:$primary
+}
+.text-900{
+  color:$text_900
+}
+.modal.show .modal-dialog{
+  margin-top: 100px;
 }
 </style>
+<script>
+import Top from '../src/components/front/top.vue'
+export default {
+  components: {
+    Top
+  }
+}
+</script>
