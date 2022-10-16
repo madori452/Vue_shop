@@ -85,7 +85,7 @@ p.description{
   }
 }
 button.continue{
-  width: 100px;
+  width: auto;
   height: 30px;
   background-color: $primary;
   margin-left: 10px;
