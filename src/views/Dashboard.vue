@@ -8,6 +8,9 @@
 </template>
 <style scoped lang="scss">
 @import '../assets/scss/main.scss';
+html,body{
+  height: 100%;
+}
 .dashboard{
   background-image: url('../assets/Admin/bg02.png');
   background-size: cover;

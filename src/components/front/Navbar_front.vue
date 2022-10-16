@@ -16,10 +16,10 @@
             <router-link to="../../user/articles" class="nav-link item" aria-current="page"  @click="closeNav">品牌故事</router-link>
           </div>
           <div class="navbar-nav ms-auto">
-            <router-link to="../../login" class="nav-link " aria-current="page">
+            <router-link to="../../login" class="nav-link " aria-current="page"  @click="closeNav">
               <img src="@/assets/Nav/login.svg" alt="後台登入">
             </router-link>
-            <router-link to="../../user/cart" class="nav-link " aria-current="page">
+            <router-link to="../../user/cart" class="nav-link " aria-current="page"  @click="closeNav">
               <div class="cart-icon" >
                 <img src="@/assets/Nav/chart.svg" alt="購物車" >
                 <div v-if="shoppingCart" class="tip">{{shoppingCart}}</div>

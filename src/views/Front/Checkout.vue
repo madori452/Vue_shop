@@ -3,7 +3,9 @@
   <!-- Banner -->
   <div class="container-fluid d-flex align-items-center justify-content-center px-0">
     <h4 class="en-font">CART</h4>
-    <img src="../../assets/Cart/banner-cart.png" class="img-fluid banner" alt="banner">
+    <img src="@/assets/Cart/banner-cart.png" class="d-lg-block d-none w-100" alt="banner">
+    <img src="@/assets/Cart/cart-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
+    <img src="@/assets/Cart/cart-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
   </div>
 
   <!-- 內容 -->
@@ -28,7 +30,7 @@
     </div>
 
     <div class="bg-white col-xl-7 row justify-content-center">
-      <form class="py-5 px-5" @submit.prevent="payOrder">
+      <form class="py-5 px-2" @submit.prevent="payOrder">
         <p class="en-font h4">訂單資訊</p>
         <hr />
 
@@ -129,10 +131,10 @@ h4.en-font{
 .step-line:after{
   display: block;
   content: '';
-  width: 364px;
+  width: 360px;
   height: 2px;
   position: absolute;
-  left: calc(50% - 183px);
+  left: calc(50% - 176px);
   top: 15px;
   z-index: 0;
   background-color: #ddd;

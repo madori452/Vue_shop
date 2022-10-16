@@ -36,11 +36,18 @@
 .num{
   font-size: 60px;
   margin-top: -20px;
+  @include phone{
+    font-size: 40px;
+    margin-top: 10px;
+  }
 }
 .percent{
   font-size: 40px;
 }
 .off{
   font-size: 32px;
+  @include phone{
+    font-size: 26px;
+  }
 }
 </style>

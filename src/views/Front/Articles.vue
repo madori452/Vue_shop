@@ -16,10 +16,10 @@
               <div class="px-0 cover-img " :style="{ backgroundImage:'url(' +item.image+ ')'}" alt="cover"></div>
             </router-link>
           </div>
-          <div class="col-6 col-sm-7 bg-white">
+          <div class="col-6 col-sm-7 bg-white d-flex flex-column justify-content-center">
             <p class="h5 mt-4 en-font sub-title">{{item.title}}</p>
             <p class="description text-900">{{item.description}}</p>
-            <router-link class="en-font h4 mask text-white text-center position-absolute" :to="`/user/article/${ item.id }`">
+            <router-link class="en-font h4 mask text-white text-left" :to="`/user/article/${ item.id }`">
               <button class="continue en-font h6">...繼續閱讀</button>
             </router-link>
 
@@ -70,7 +70,7 @@ p.content{
 p.sub-title{
   padding-left: 10px;
   @include phone{
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 p.description{
@@ -80,8 +80,8 @@ p.description{
   letter-spacing: 0;
   overflow: hidden;
   @include pad{
-    font-size: 14px;
-    line-height: 1.3em;
+    font-size: 12px;
+    line-height: 1em;
   }
 }
 button.continue{
@@ -91,7 +91,10 @@ button.continue{
   margin-left: 10px;
   border: 0px;
   color: #fff;
-  @include pad{
+  @include lg-screen{
+    font-size: 14px;
+  }
+  @include phone{
     font-size: 14px;
   }
 }

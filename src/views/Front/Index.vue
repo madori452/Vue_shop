@@ -5,7 +5,7 @@
   </div>
   <div class="container">
     <div class="row row-adj01">
-      <div class="col-md-7">
+      <div class="col-md-6 offset-md-1">
         <div class="content" data-aos="fade-up"  data-aos-duration="800" data-aos-once="true" data-aos-delay="600">
           <h5 class="en-font fst-italic text-primary">- Home Ritual -</h5>
           <h3 class="fs-4-lg fs-5-md sub-titel">創造居家儀式感</h3>
@@ -123,6 +123,9 @@ h3, .value-content h5{
 .value-text{
   background-color: #ffffff6e;
   padding: 50px 80px;
+  @include phone{
+    padding: 50px 40px;
+  }
 }
 .button-primary{
   @include button-primary-border-index;

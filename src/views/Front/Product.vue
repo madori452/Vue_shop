@@ -155,6 +155,7 @@
   }
   .qty_input{
     border: 1px solid $primary !important;
+    border-radius: 0px !important;
   }
   p.type{
     width: 106px;

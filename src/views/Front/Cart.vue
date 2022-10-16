@@ -3,7 +3,9 @@
   <!-- Banner -->
   <div class="container-fluid d-flex align-items-center justify-content-center px-0">
     <h4 class="en-font">CART</h4>
-    <img src="../../assets/Cart/banner-cart.png" class="img-fluid banner" alt="banner">
+    <img src="@/assets/Cart/banner-cart.png" class="d-lg-block d-none w-100" alt="banner">
+    <img src="@/assets/Cart/cart-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
+    <img src="@/assets/Cart/cart-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
   </div>
   <!-- 內容 -->
   <div class="container">
@@ -15,18 +17,18 @@
             <p class="num d-block mx-auto" :class="{primary:true}">1</p>
             <p class="step">確認訂單資訊</p>
           </li>
-          <li class="circle circle01 col-3  offset-sm-1">
+          <li class="circle circle01 col-3  offset-1">
             <p class="num d-block mx-auto">2</p>
             <p class="step">建立個人訂單</p>
           </li>
-          <li class="circle circle01 col-3  offset-sm-1">
+          <li class="circle circle01 col-3  offset-1">
             <p class="num d-block mx-auto">3</p>
             <p class="step">付款完成</p>
           </li>
         </ul>
       </div>
       <!-- 購物列表 -->
-      <div class="row"  v-if="cart.carts">
+      <div class="row mx-auto"  v-if="cart.carts">
           <!-- 購物車0-->
           <div class="col-lg-6 mx-auto text-center my-5 cart-none bg-white" v-if="cart.carts.length===0">
             <div class="go-shop mx-auto d-flex justify-content-center align-items-center flex-column">
@@ -38,7 +40,7 @@
           </div>
           <!-- 購物車列表 -->
           <div class="col-xl-5 cart-list-menu bg-white offset-xl-1" v-if="cart.carts.length>=1">
-            <div class="px-4">
+            <div class="px-1">
               <p class="h5 en-font mt-5">購物清單</p>
               <hr />
               <table class="table align-middle px-4">
@@ -101,7 +103,7 @@
               <div class="row w-100 m-0 coupon-code">
                 <div class="col-12 d-flex justify-content-end">
                     <input type="text" class="form-control d-inline-block" v-model="coupon_code" placeholder="請輸入優惠碼">
-                    <button class="btn btn-outline-secondary d-inline-block ms-2 col-4" type="button" @click="addCouponCode">
+                    <button class="btn btn-outline-secondary coupon d-inline-block ms-2 col-4" type="button" @click="addCouponCode">
                         套用優惠碼
                     </button>
                 </div>
@@ -184,10 +186,10 @@ h4.en-font{
 .step-line:after{
   display: block;
   content: '';
-  width: 364px;
+  width: 360px;
   height: 2px;
   position: absolute;
-  left: calc(50% - 183px);
+  left: calc(50% - 176px);
   top: 15px;
   z-index: 0;
   background-color: #ddd;
@@ -246,6 +248,12 @@ p.step{
   width: 200px;
   border-radius: 0px;
 }
+button.coupon{
+  font-size: 16px;
+  @include phone{
+    font-size: 14px;
+  }
+}
 .btn-next{
   @include button-primary-cart;
   width: 110px;
@@ -263,7 +271,10 @@ p.step{
   margin: auto;
 }
 .form-order{
-  padding: 0px 60px;
+  padding: 0px 30px;
+  @include phone{
+    padding: 0px 40px;
+  }
 }
 .coupon-code{
   @include pad{
