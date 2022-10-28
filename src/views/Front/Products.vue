@@ -38,7 +38,7 @@
                   <div class="h5" v-if="!item.price">{{ item.origin_price }} 元</div>
                   <div class="row">
                     <div class="col-5 pe-0">
-                      <del class="h6 text-start lh-lg" v-if="item.price">NT {{ item.origin_price }} 元</del>
+                      <del class="h6 text-start lh-lg price-origin" v-if="item.price">NT {{ item.origin_price }} 元</del>
                     </div>
                     <div class="col-7">
                       <h4 class="text-end price">NT {{ item.price }} 元</h4>
@@ -95,10 +95,17 @@
   border-radius: 0px;
   border: 2px solid #a49d738c;
 }
-
+.price-origin{
+  @include xl-screen{
+    font-size: 14px;
+  }
+}
 .price{
   color: $primary;
   font-weight: 800;
+  @include xl-screen{
+    font-size: 18px;
+  }
   @include pad{
     font-size: 14px;
   }

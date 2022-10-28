@@ -76,11 +76,12 @@ export default {
       })
     }
   },
-  created () {
-    this.getFavorite()
-  },
+  // created () {
+  //   this.getFavorite()
+  // },
   mounted () {
     this.bsOffcanvas = new Offcanvas(this.$refs.offcanvasRight)
+    this.getFavorite()
   }
 }
 </script>

@@ -161,7 +161,7 @@ export default {
     return {
       shoppingCart: '',
       toggleNav: false,
-      myFavorite: ''
+      myFavorite: JSON.parse(localStorage.getItem('MyFavorite')) || []
     }
   },
   inject: ['emitter'],
@@ -171,7 +171,8 @@ export default {
   // 取得購物車列表
   methods: {
     openCanvas () {
-      this.$refs.canvas.showCanvas()
+      const data = JSON.parse(localStorage.getItem('MyFavorite')) || []
+      this.$refs.canvas.showCanvas(data)
       if (window.innerWidth < 992) {
         this.toggleNav = false
       }

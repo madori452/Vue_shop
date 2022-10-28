@@ -37,6 +37,12 @@ $text_titile:32px;
 
 
 //media screen
+@mixin xl-screen{
+    @media (max-width:1440px) {
+        @content;
+    } 
+}
+
 @mixin lg-screen{
     @media (max-width:1024px) {
         @content;
