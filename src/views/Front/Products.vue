@@ -6,7 +6,7 @@
     <img src="@/assets/Index/Carousel/01-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
     <img src="@/assets/Index/Carousel/01-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
   </div>
-  <div class="container mx-auto pt-5">
+  <div class="container pt-5">
     <div class="row">
       <div class="col-md-3"  data-aos="fade-up"  data-aos-duration="800" data-aos-once="true" data-aos-delay="900">
         <!-- 篩選列表 -->
@@ -22,34 +22,50 @@
         <!-- 篩選列表end -->
 
       </div>
-      <div class="col-md-9 mb-5"  data-aos="fade-up"  data-aos-duration="800" data-aos-once="true" data-aos-delay="900">
-
+      <div class="col-md-9 my-4"  data-aos="fade-up"  data-aos-duration="800" data-aos-once="true" data-aos-delay="900">
           <!-- 產品資料 -->
-          <div  class="card rounded-0 col-lg-3 me-3 mt-3"   v-for="item in typeproducts" :key="item.id">
-              <div class="bg-image"
-              :style="{backgroundImage: `url(${item.imageUrl})`}">
-                <router-link class="en-font h4 mask text-white text-center position-absolute" :to="`/user/product/${ item.id }`">
-                  see more
-                </router-link>
-              </div>
-              <div class="card-body">
-                <h5 class="card-title en-font">{{ item.title }}</h5>
-                <div class="h5" v-if="!item.price">{{ item.origin_price }} 元</div>
-                <div class="row">
-                  <div class="h5 col-md-8 pe-2 text-end" v-if="item.price">
-                    <del class="h6 text-start d-block " v-if="item.price">NT {{ item.origin_price }} 元</del>
-                    <h4 class="text-start price">NT {{ item.price }} 元</h4>
+          <div class="row">
+            <div class="col-md-6 col-lg-4 mt-3 px-md-2 px-4"   v-for="item in typeproducts" :key="item.id">
+              <div class="card rounded-0">
+                <div class="bg-image"
+                :style="{backgroundImage: `url(${item.imageUrl})`}">
+                  <router-link class="en-font h4 mask text-white text-center position-absolute" :to="`/user/product/${ item.id }`">
+                    see more
+                  </router-link>
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title en-font text-hidden">{{ item.title }}</h5>
+                  <div class="h5" v-if="!item.price">{{ item.origin_price }} 元</div>
+                  <div class="row">
+                    <div class="col-5 pe-0">
+                      <del class="h6 text-start lh-lg" v-if="item.price">NT {{ item.origin_price }} 元</del>
+                    </div>
+                    <div class="col-7">
+                      <h4 class="text-end price">NT {{ item.price }} 元</h4>
+                    </div>
                   </div>
-                  <button type="button" class="py-0 col-4 btn btn-cart btn-outline-primary" :disabled="this.status.loadingItem===item.id"
-                        @click="addCart(item.id)" >
-                    <span v-if="this.status.loadingItem===item.id" class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-                    <i class="bi bi-cart3 p-0"></i>
-                  </button>
+                  <div class="d-flex justify-content-end">
+                    <button type="button" class="rounded-0 py-0 col-6 btn btn-outline-primary me-1"
+                      @click="addFavorite(item)" >
+                      <span v-if="JSON.stringify(myFavorite).includes(item.id)">
+                        <i class="bi bi-heart-fill"></i>
+                      </span>
+                      <span v-else>
+                        <i class="bi bi-heart"></i>
+                      </span>
+                    </button>
+                    <button type="button" class="rounded-0 py-0 col-6 btn btn-cart btn-outline-primary ms-1" :class="{'disabled':this.status.loadingItem===item.id}"
+                          @click="addCart(item.id)" >
+                        <i class="bi bi-cart3 p-0"></i>
+                    </button>
+                  </div>
 
                 </div>
-
               </div>
+
+            </div>
           </div>
+
           <!-- 產品資料 end-->
       </div>
     </div>
@@ -60,9 +76,10 @@
 </template>
 
 <style scoped lang="scss">
+
 @import '@/assets/scss/main.scss';
 .title{
-    position: absolute;
+  position: absolute;
   z-index: 2;
   font-size: $text_titile;
 
@@ -75,23 +92,8 @@
   }
 }
 .list-group{
-  width: 90%;
   border-radius: 0px;
   border: 2px solid #a49d738c;
-}
-
-.card{
-  display: inline-block;
-  width: 18rem;
-  @include lg-screen{
-    width:15rem;
-  }
-  @include pad{
-    width:13rem;
-  }
-  @include phone{
-    width:10rem;
-  }
 }
 
 .price{
@@ -107,23 +109,28 @@
     font-size: 14px;
   }
 }
+.text-hidden{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 .btn-cart{
   background-color: $primary;
-  width: 40px;
-  height: 38px;
-  margin:15px 20px 0 auto;
-  @include pad{
-    width: 100%;
-    margin:0 auto;
-  }
+}
+.bi-heart{
+  color: $primary;
+  font-size: 20px;
+}
+
+.btn:hover{
+  background-color: #a49d73cf;
+}
+.btn:hover .bi-heart{
+  color: #fff;
 }
 .bi-cart3{
   color: #fff;
   font-size: 20px;
-  margin: -5px 20px 10px -4px;
-  @include pad{
-    margin:0px;
-  }
 }
 del{
   color: $text_800;
@@ -134,7 +141,12 @@ del{
   background-size: cover;
   background-position: center;
   @include pad{
-    height: 150px;
+    height: 300px;
+  }
+}
+.card{
+  @include pad{
+    height: 400px;
   }
 }
 .mask{
@@ -158,7 +170,11 @@ del{
 
 <script>
 import Pagination from '@/components/Pagination.vue'
-
+const storageMethods = {
+  getLikeItem () {
+    return JSON.parse(localStorage.getItem('MyFavorite'))
+  }
+}
 export default {
   data () {
     return {
@@ -178,7 +194,9 @@ export default {
 
       cart: {},
       coupon_code: '',
-      orderId: ''
+      orderId: '',
+      // 收藏清單
+      myFavorite: storageMethods.getLikeItem() || []
     }
   },
   components: {
@@ -246,6 +264,32 @@ export default {
       this.productClass = item
     },
 
+    // 取得收藏
+    getFavorite () {
+      this.myFavorite = storageMethods.getLikeItem() || []
+    },
+    // 加入收藏
+    addFavorite (data) {
+      this.myFavorite = storageMethods.getLikeItem() || []
+      if (JSON.stringify(this.myFavorite).includes(data.id)) {
+        this.myFavorite.forEach((item, index) => {
+          if (item.id === data.id) {
+            this.myFavorite.splice(index, 1)
+          }
+        })
+        const favoriteString = JSON.stringify(this.myFavorite)
+        localStorage.setItem('MyFavorite', favoriteString)
+        this.$swal({ icon: 'warning', title: '已從最愛中移除' })
+      } else {
+        this.myFavorite.push(data)
+        const dataString = JSON.stringify(this.myFavorite)
+        localStorage.setItem('MyFavorite', dataString)
+        this.myFavorite = JSON.parse(localStorage.getItem('MyFavorite'))
+        this.$swal({ icon: 'success', title: '儲存成功！' })
+      }
+      this.emitter.emit('favorite-qty')
+    },
+
     // 加入購物車
     addCart (id) {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
@@ -308,9 +352,14 @@ export default {
   },
 
   created () {
-    this.getProducts()
     this.getCart()
+    this.getProducts()
     this.getProductPage()
+    this.getFavorite()
+    this.emitter.emit('favorite-qty', this.myFavorite)
+    this.emitter.on('remove-data', (data) => {
+      this.getFavorite()
+    })
   }
 
 }

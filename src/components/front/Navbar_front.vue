@@ -16,19 +16,24 @@
             <router-link to="../../user/articles" class="nav-link item" aria-current="page"  @click="closeNav">品牌故事</router-link>
           </div>
           <div class="navbar-nav ms-auto">
-            <router-link to="../../login" class="nav-link " aria-current="page"  @click="closeNav">
-              <img src="@/assets/Nav/login.svg" alt="後台登入">
-            </router-link>
+            <a href="#"  class="nav-link position-relative" aria-current="page"  @click.prevent="openCanvas" >
+              <div class="cart-icon">
+                <img src="@/assets/Nav/love.svg" alt="收藏">
+                <div v-if="myFavorite" class="tip02">{{myFavorite.length}}</div>
+              </div>
+            </a>
+
             <router-link to="../../user/cart" class="nav-link " aria-current="page"  @click="closeNav">
               <div class="cart-icon" >
                 <img src="@/assets/Nav/chart.svg" alt="購物車" >
-                <div v-if="shoppingCart" class="tip">{{shoppingCart}}</div>
+                <div v-if="shoppingCart" class="tip01">{{shoppingCart}}</div>
               </div>
             </router-link>
           </div>
          </div>
     </div>
   </nav>
+  <Canvas ref="canvas"></Canvas>
 </template>
 
 <style scoped lang="scss">
@@ -101,7 +106,7 @@
     position: relative;
     width: 40px;
   }
-  .tip{
+   .tip01{
     position: absolute;
     width: 24px;
     height: 24px;
@@ -109,6 +114,21 @@
     border-radius: 50%;
     top:-8px;
     right:-10px;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    color: #fff;
+  }
+  .tip02{
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background-color: $primary;
+    border-radius: 50%;
+    top:-8px;
+    right:-8px;
+    font-size: 14px;
+    line-height: 24px;
     text-align: center;
     color: #fff;
   }
@@ -131,11 +151,17 @@
 </style>
 
 <script>
+import Canvas from '@/components/front/canvas.vue'
+
 export default {
+  components: {
+    Canvas
+  },
   data () {
     return {
       shoppingCart: '',
-      toggleNav: false
+      toggleNav: false,
+      myFavorite: ''
     }
   },
   inject: ['emitter'],
@@ -144,6 +170,12 @@ export default {
 
   // 取得購物車列表
   methods: {
+    openCanvas () {
+      this.$refs.canvas.showCanvas()
+      if (window.innerWidth < 992) {
+        this.toggleNav = false
+      }
+    },
     getCart () {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
       this.isLoading = true
@@ -174,6 +206,10 @@ export default {
         this.toggleNav = !this.toggleNav
       }
     },
+    getFavorite () {
+      this.myFavorite = JSON.parse(localStorage.getItem('MyFavorite')) || []
+    },
+
     closeNav () {
       if (window.innerWidth < 992) {
         this.toggleNav = false
@@ -184,15 +220,22 @@ export default {
 
   mounted () {
     this.getCart()
+    this.getFavorite()
     // 數量設定
     this.emitter.on('update-qty', () => {
       this.getCart()
+    })
+    this.emitter.on('favorite-qty', () => {
+      this.getFavorite()
     })
   },
   unmounted () {
     // 數量設定
     this.emitter.off('update-qty', () => {
       this.getCart()
+    })
+    this.emitter.off('favorite-qty', () => {
+      this.getFavorite()
     })
     this.scroll()
   }

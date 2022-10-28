@@ -2,24 +2,36 @@
 <div class="footer">
   <div class="container">
     <div class="row">
-      <div class="col-lg-6">
+      <div class="col-lg-4">
         <img src="@/assets/Nav/logo-gy.svg" alt="logo" class="logo img-fluid">
       </div>
-      <div class="col-lg-6">
+      <div class="col-lg-8">
         <div class="row contact">
-          <div class="col-lg-4 offset-lg-2">
+          <div class="col-lg-3 offset-lg-2">
             <h4 class="en-font">聯絡我們</h4>
             <p>電話：09123335789</p>
           </div>
-          <div class="col-lg-3">
+          <div class="col-lg-2">
             <h4 class="en-font">品牌故事</h4>
-            <p>-關於我們</p>
-            <p>-隱私權政策</p>
+            <router-link to="../../user/articles" class="nav-link " aria-current="page">
+              <p>-關於我們</p>
+            </router-link>
+            <router-link to="../../user/privacy" class="nav-link " aria-current="page">
+              <p>-隱私權政策</p>
+            </router-link>
           </div>
-           <div class="col-lg-3">
+           <div class="col-lg-2">
             <h4 class="en-font">購物說明</h4>
-            <p>-常見問題</p>
-            <p>-常見問題</p>
+            <router-link to="../../user/question" class="nav-link " aria-current="page">
+              <p>-常見問題</p>
+            </router-link>
+          </div>
+
+          <div class="col-lg-2">
+            <h4 class="en-font">後台系統</h4>
+            <router-link to="../../login"  class="nav-link " aria-current="page">
+              <p>-後台系統登入</p>
+            </router-link>
           </div>
         </div>
 

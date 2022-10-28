@@ -71,6 +71,16 @@ const routes = [
       {
         path: 'article/:articleId',
         component: () => import('../views/Front/Article')
+      },
+      // 用戶端隱私
+      {
+        path: 'privacy',
+        component: () => import('../views/Front/Privacy')
+      },
+      // 用戶QA
+      {
+        path: 'question',
+        component: () => import('../views/Front/QA')
       }
 
     ]
@@ -91,7 +101,14 @@ const router = createRouter({
   history: createWebHashHistory(),
   routes,
   // 路由點擊active
-  linkActiveClass: 'active'
+  linkActiveClass: 'active',
+  scrollBehavior (to) {
+    if (to.fullPath.match('/')) {
+      return {
+        top: 0
+      }
+    }
+  }
 })
 
 export default router
