@@ -1,11 +1,11 @@
 <template>
-<CustomLoading :active="isLoading"></CustomLoading>
+  <CustomLoading :active="isLoading"></CustomLoading>
   <div class="container-fluid d-flex align-items-center justify-content-center px-0">
-    <p class="en-font title fs-3-lg fs-4-md mb-0">ABOUT US</p>
-    <p class="content en-font">以瑞典當地自然環境風土化為風格啟發，揀選天然有機原料組成純淨配方，堅持只給最好的。</p>
-    <img src="@/assets/Article/About.png" class="d-lg-block d-none w-100" alt="banner">
-    <img src="@/assets/Index/Carousel/03-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
-    <img src="@/assets/Index/Carousel/03-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
+    <p class="en-font title fs-3-lg fs-4-md mb-0">關於我們</p>
+    <p class="content en-font">以瑞典當地自然環境為風格啟發，揀選天然有機原料，堅持只給最好的。</p>
+    <img src="@/assets/img/Article/About.png" class="d-lg-block d-none w-100" alt="banner" >
+    <img src="@/assets/img/Index/Carousel/03-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
+    <img src="@/assets/img/Index/Carousel/03-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
   </div>
   <div class="container mx-auto py-4 mt-4">
     <nav aria-label="breadcrumb ">
@@ -16,18 +16,53 @@
     </nav>
     <div class="row pb-5">
       <div class="col-lg-6">
-        <img :src="article.image" alt="product_pic" class="img-fluid">
+        <img :src="article.image" alt="product_pic" class="img-fluid" >
       </div>
       <div class="col-lg-6 all-content">
-        <p class="tag en-font">{{article.tag}}</p>
-        <p class="fst-italic en-font">Author : {{article.author}}</p>
-        <p class="h5 mb-2 en-font article_title">{{article.title}}</p>
-        <p class="article_content text-900">{{article.content}}</p>
+        <p class="tag en-font">{{ article.tag }}</p>
+        <p class="fst-italic en-font">Author : {{ article.author }}</p>
+        <p class="h5 mb-2 en-font article_title">{{ article.title }}</p>
+        <p class="article_content text-900">{{ article.content }}</p>
       </div>
     </div>
   </div>
-
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+      article: '',
+      id: '',
+      isLoading: false
+
+    }
+  },
+
+  inject: ['emitter'],
+  methods: {
+    getArticle (id) {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/article/${id}`
+      this.isLoading = true
+      this.$http.get(url).then((res) => {
+        if (res.data.success) {
+          this.isLoading = false
+          this.article = res.data.article
+        }
+      }).catch(err => {
+        this.$swal({
+          icon: 'error',
+          title: `${err.data.message}`
+        })
+      })
+    }
+  },
+  created () {
+    this.id = this.$route.params.articleId
+    this.getArticle(this.id)
+  }
+}
+</script>
 
 <style scoped lang="scss">
 @import '@/assets/scss/main.scss';
@@ -57,7 +92,7 @@ p.content{
     padding: 0 50px;
   }
   @include phone{
-    font-size: 14px;
+     padding: 0 10px;
   }
 }
 .tag{
@@ -71,7 +106,7 @@ p.content{
 }
 .breadcrumb{
   @include pad{
-    font-size: 14px;
+    font-size: 16px;
   }
 }
 .all-content{
@@ -82,47 +117,8 @@ p.content{
 .article_content{
   line-height: 26px;
   @include pad{
-    font-size: 14px;
+    font-size: 16px;
+    line-height: 32px;
   }
 }
 </style>
-
-<script>
-
-export default {
-  data () {
-    return {
-      article: '',
-      id: '',
-      isLoading: false
-
-    }
-  },
-  components: {
-  },
-  inject: ['emitter'],
-  methods: {
-    getArticle (id) {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/article/${id}`
-      this.isLoading = true
-      this.$http.get(url).then((res) => {
-        if (res.data.success) {
-          this.isLoading = false
-          this.article = res.data.article
-        }
-      }).catch(err => {
-        this.$swal({
-          icon: 'error',
-          title: `${err.data.message}`
-        })
-      })
-    }
-  },
-
-  created () {
-    this.id = this.$route.params.articleId
-    this.getArticle(this.id)
-  }
-
-}
-</script>

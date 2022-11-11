@@ -1,7 +1,7 @@
 <template>
   <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
        aria-labelledby="exampleModalLabel" aria-hidden="true" ref="modal">
-   <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content border-0">
         <div class="modal-header bg-dark text-white">
           <h5 class="modal-title" id="exampleModalLabel">
@@ -25,11 +25,8 @@
                   placeholder="請輸入圖片連結"
                 />
                 <input type="file" ref="fileInput" class="form-control" id="image" @change="uploadFile">
-
               </div>
-
               <img class="img-fluid" :src="tempArticle.image" alt="" />
-
             </div>
             <div class="col-sm-8">
               <div class="mb-3">
@@ -56,7 +53,6 @@
                 </textarea>
                 </div>
               </div>
-
               <!-- 編輯器 -->
               <div class="row gx-2">
                 <div class="mb-3 col-md-12">
@@ -72,7 +68,6 @@
                 </textarea>
                 </div>
               </div>
-
               <div class="row gx-2">
                 <div class="mb-3 col-md-6">
                   <label for="origin_price" class="form-label">分類</label>
@@ -93,7 +88,6 @@
                   />
                 </div>
               </div>
-
               <div class="row gx-2">
                 <div class="mb-3 col-md-6">
                   <label for="origin_price" class="form-label">日期</label>
@@ -104,7 +98,6 @@
                   />
                 </div>
               </div>
-
               <div class="mb-3">
                   <div class="form-check">
                       <input type="checkbox" id="isPublic" class="form-check-input"
@@ -116,7 +109,6 @@
           </div>
         </div>
         <div class="modal-footer">
-
           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
             取消
           </button>
@@ -130,12 +122,12 @@
         </div>
       </div>
     </div>
-</div>
+  </div>
 </template>
+
 <script>
 import modalMixin from '@/mixins/modalMixin'
 export default {
-
   props: {
     article: {
       type: Object,
@@ -145,7 +137,6 @@ export default {
   data () {
     return {
       tempArticle: {}
-
     }
   },
   emits: ['update'],
@@ -158,7 +149,6 @@ export default {
     }
   },
   methods: {
-
     uploadFile () {
       const uploadFile = this.$refs.fileInput.files[0]
       const formData = new FormData()
@@ -176,7 +166,5 @@ export default {
         })
     }
   }
-
 }
-
 </script>

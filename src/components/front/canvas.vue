@@ -11,7 +11,7 @@
                   <div class="bg-cover" :style="{backgroundImage:'url(' +item.imageUrl+ ')',height:'80px' }"></div>
                 </div>
                 <div class="col-6 px-0">
-                  <p class="list-title">{{item.title}}</p>
+                  <p class="list-title">{{ item.title }}</p>
                 </div>
                 <div class="col-1 px-0">
                   <span @click="removeItem(item)">
@@ -44,7 +44,6 @@ export default {
       allProducts: [], // 所有產品
       filters: [], // (渲染用)篩選後的最愛清單資料,
       favoriteList: []
-
     }
   },
 
@@ -70,15 +69,12 @@ export default {
           this.emitter.emit('favorite-qty', this.myFavorite)
           this.emitter.emit('remove-data', this.myFavorite)
           this.$swal({ icon: 'warning', title: '已從最愛中移除' })
-
           this.getFavorite()
         }
       })
     }
   },
-  // created () {
-  //   this.getFavorite()
-  // },
+
   mounted () {
     this.bsOffcanvas = new Offcanvas(this.$refs.offcanvasRight)
     this.getFavorite()

@@ -11,27 +11,9 @@
           {{ msg.content }}
       </div>
     </div>
-
   </div>
 </template>
-<style lang="scss" scoped>
-  .toast-msg{
-    width: 300px;
-    height: auto;
-    position: absolute;
-    left: calc(50% - 150px);
-    bottom: 50%;
-    background-color: #fff;
-    border: 0px;
-  }
-  .bi-check-circle-fill{
-    font-size: 24px;
-  }
-  .toast-msg,.toast-header{
-    font-size: 16px;
-  }
 
-</style>
 <script>
 import Toast from 'bootstrap/js/dist/toast'
 export default {
@@ -48,3 +30,21 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .toast-msg{
+    width: 300px;
+    height: auto;
+    position: absolute;
+    left: calc(50% - 150px);
+    bottom: 50%;
+    background-color: #fff;
+    border: 0px;
+  }
+  .bi-check-circle-fill{
+    font-size: 24px;
+  }
+  .toast-msg,.toast-header{
+    font-size: 16px;
+  }
+</style>

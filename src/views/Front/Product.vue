@@ -1,13 +1,13 @@
 <template>
-  <CustomLoading :active="isLoading"></CustomLoading>
+  <CustomLoading :active="isLoading"/>
   <div class="container">
     <!-- 產品簡述   -->
     <div class="row info-row">
       <div class="col-lg-7">
-        <div class="card-product" :style="{backgroundImage:'url('+imgUrl+')',height:'500px',backgroundSize: '100%', backgroundPosition:'center 50%'}"></div>
+        <div class="card-product" :style="{backgroundImage:'url('+imgUrl+')',height:'500px',backgroundSize: 'cover', backgroundPosition:'center 50%'}"></div>
       </div>
-      <div class="col-lg-5 d-flex flex-column mt-2">
-        <p class="h6 type">{{product.category}}</p>
+      <div class="col-lg-5 d-flex flex-column">
+        <p class="h6 type mt-lg-0 mt-3">{{ product.category }}</p>
         <nav aria-label="breadcrumb ">
           <ol class="breadcrumb">
             <li class="breadcrumb-item "><router-link to="/user/products" class="text-black-50 text-decoration-none">所有產品</router-link></li>
@@ -20,9 +20,8 @@
         <div class="row text-black-80 px-2">
           <p class="h6 mt-4">商品敘述</p>
           <hr>
-          <p class="h6 lh-base">{{produtContent}}</p>
+          <p class="h6">{{ produtContent }}</p>
         </div>
-
         <!-- 數量 -->
         <div class="num-select">
           <label for="productNum"> 數量</label>
@@ -30,12 +29,12 @@
             <div class="col-sm-8">
               <div class="mx-auto">
                 <div class="row px-2">
-                  <button type="button button-count"  @click="addNum()"
+                  <button type="button button-count"  @click="addNum"
                       class="btn btn-primary btn-sm rounded-0 col-2">
                     <i class="bi bi-plus text-white h4"></i>
                   </button>
-                  <input class="col-8 button-count bg-transparent qty_input border border-2 pt-1 text-center px-3" v-model="productCount" id="productNum" min="1">
-                  <button type="button button-count" @click="reduceNum()"
+                  <input class="col-8 button-count bg-transparent qty_input border-2 pt-1 text-center px-3" v-model="productCount" id="productNum" min="1">
+                  <button type="button button-count" @click="reduceNum"
                       class="col-2 btn btn-primary btn-sm rounded-0">
                       <i class="bi bi-dash-lg text-white h4"></i>
                   </button>
@@ -53,7 +52,6 @@
 
           </div>
         </div>
-
       </div>
     </div>
     <!-- 產品資訊 -->
@@ -68,14 +66,14 @@
         <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
           <div class="teb-content mt-3 px-3">
               <p class="h6 text-primary">運送說明</p>
-              <p class="mt-1 lh-base">當您的款項信用卡資料核對無誤後，該筆交易便完成付款程序，貨到付款則直接進行配送。<br/>
-              我們將會在付款完成後的 1 - 7 個工作天內(不含週休及國定例假日)，將商品宅配送達您指定的收件地址。<br/>
-              為了保護商品的完整，我們會妥善包裝您所訂購的商品，收到貨後請立即開箱檢查，確認商品包裝完成無缺。</p>
+              <p class="mt-1">當款項信用卡資料核對完後，該筆交易便完成付款，貨到付款則直接進行配送。<br/>
+              我們將會在付款完成後的 1 - 7 個工作天內，將商品宅配送達您指定的收件地址。<br/>
+              為了保護商品的完整，請您收到貨後請立即開箱檢查，確認商品包裝完成無缺。</p>
           </div>
 
           <div class="teb-content mt-4 px-3">
               <p class="h6 text-primary">配送地區</p>
-              <p class="mt-1 lh-base">台灣本島及離島，離島地區為澎湖、金門、馬祖、綠島。離島地區若遇天候、海象、船班年節停航及船班歲修等不可控之因素，恕無法指定希望配達日及時段。</p>
+              <p class="mt-1">台灣本島及離島若遇天候、海象、等不可控之因素，恕無法指定希望配達日及時段。</p>
           </div>
 
         </div>
@@ -94,29 +92,130 @@
         </div>
       </div>
     </div>
-
     <!-- 可能喜歡 -->
     <div class="row px-3">
       <p class="h6 text-primary">您可能也會喜歡</p>
       <hr>
       <div class="row my-4">
-        <div class="col-md-3"  v-for="item in allproducts"  :key="item.id">
+        <div class="col-md-3"  v-for="item in allProducts"  :key="item.id">
           <div class="card-body">
             <div class="bg-image" style="height: 250px; background-size: cover; background-position: center"
               :style="{backgroundImage: `url(${item.imageUrl})`}">
-                <span @click="toProduct(`${item.id}`)" class="en-font h4 mask text-white text-center position-absolute">
+                <span @click="toProduct(item.id)" class="en-font h4 mask text-white text-center position-absolute">
                   see more
                 </span>
             </div>
             <h5 class="card-title en-font">{{ item.title }}</h5>
-
-      </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+      product: {},
+      allProducts: {},
+      randomProducts: [],
+      arrSet: [],
+      id: '',
+      imgUrl: '',
+      productCount: 1,
+      produtContent: '',
+      status: {
+        loadingItem: '' // 對應品項id
+      }
+    }
+  },
+  inject: ['emitter'],
+
+  methods: {
+    getProducts () {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`
+      this.isLoading = true
+      this.$http.get(url).then((res) => {
+        if (res.data.success) {
+          this.isLoading = false
+          this.allProducts = res.data.products
+          this.recommend()
+        }
+      }).catch(err => {
+        this.$swal({
+          icon: 'error',
+          title: `${err.data.message}`
+        })
+      })
+    },
+    recommend () {
+      const arrSet = new Set([])
+      const productAll = this.allProducts
+      for (let i = 0; i <= 3; i++) {
+        this.randomProducts = productAll[Math.floor(Math.random() * productAll.length)]
+        arrSet.add(this.randomProducts)
+      }
+      this.allProducts = arrSet
+    },
+    toProduct (id) {
+      this.$router.push(`${id}`)
+      this.getProduct(id)
+    },
+    // 取得單一資料
+    getProduct (id) {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/product/${id}`
+      this.isLoading = true
+      this.$http.get(url).then((res) => {
+        this.product = res.data.product
+        this.imgUrl = res.data.product.imageUrl
+        this.isLoading = false
+        this.produtContent = res.data.product.description
+      }).catch(err => {
+        this.$swal({
+          icon: 'error',
+          title: `${err.data.message}`
+        })
+      })
+    },
+    addCart (id) {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
+      const cart = {
+        product_id: id,
+        qty: 1
+      }
+      this.status.loadingItem = id
+      cart.qty = this.productCount
+      this.$http.post(url, { data: cart }).then((res) => {
+        this.status.loadingItem = ''
+        this.emitter.emit('update-qty')
+        this.$httpMessageState(res, '已加入購物車')
+      }).catch(err => {
+        this.$swal({
+          icon: 'error',
+          title: `${err.data.message}`
+        })
+      })
+    },
+    addNum () {
+      this.productCount += 1
+    },
+    reduceNum () {
+      if (this.productCount >= 1) {
+        this.productCount -= 1
+      }
+    }
+
+  },
+
+  created () {
+    this.id = this.$route.params.productId
+    this.getProduct(this.id)
+    this.getProducts()
+  }
+
+}
+</script>
 
 <style scoped lang="scss">
 @import '@/assets/scss/main.scss';
@@ -153,9 +252,9 @@
     background-size: contain;
     background-repeat: no-repeat;
   }
-  .qty_input{
-    border: 1px solid $primary !important;
-    border-radius: 0px !important;
+input.qty_input{
+    border: 1px solid $primary;
+    border-radius: 0px;
   }
   p.type{
     width: 106px;
@@ -177,7 +276,6 @@
   .button-count{
     height: 40px;
   }
-
   .num-select{
     margin-top: 80px;
   }
@@ -200,7 +298,6 @@
   bottom: 0;
   margin: auto;
   background-color:rgba(0, 0, 0,0.5);
-  // height: 200px;
   line-height: 300px;
   opacity: 0;
   text-decoration: none;
@@ -211,118 +308,3 @@
    opacity: 1;
 }
 </style>
-
-<script>
-
-export default {
-  data () {
-    return {
-      product: {},
-      allproducts: {},
-      randomProducts: [],
-      arrSet: [],
-      id: '',
-      imgUrl: '',
-      productCount: 1,
-      produtContent: '',
-      status: {
-        loadingItem: '' // 對應品項id
-      }
-    }
-  },
-  inject: ['emitter'],
-
-  methods: {
-    // 取得所有資料
-    getProducts () {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`
-      // loading狀態判斷
-      this.isLoading = true
-      this.$http.get(url).then((res) => {
-        if (res.data.success) {
-          this.isLoading = false
-
-          this.allproducts = res.data.products
-          this.recommend()
-        }
-      }).catch(err => {
-        this.$swal({
-          icon: 'error',
-          title: `${err.data.message}`
-        })
-      })
-    },
-    // 隨機產品推薦
-    recommend () {
-      const arrSet = new Set([])
-      const productAll = this.allproducts
-      for (let i = 0; i <= 3; i++) {
-        this.randomProducts = productAll[Math.floor(Math.random() * productAll.length)]
-        arrSet.add(this.randomProducts)
-      }
-      this.allproducts = arrSet
-    },
-
-    toProduct (id) {
-      this.$router.push(`${id}`)
-      this.getProduct(id)
-    },
-
-    // 取得單一資料
-    getProduct (id) {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/product/${id}`
-      this.isLoading = true
-      this.$http.get(url).then((res) => {
-        this.product = res.data.product
-        this.imgUrl = res.data.product.imageUrl
-        this.isLoading = false
-        this.produtContent = res.data.product.description
-      }).catch(err => {
-        this.$swal({
-          icon: 'error',
-          title: `${err.data.message}`
-        })
-      })
-    },
-    // 加入購物車
-    addCart (id) {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
-      const cart = {
-        product_id: id,
-        qty: 1
-      }
-      this.status.loadingItem = id
-      cart.qty = this.productCount
-      this.$http.post(url, { data: cart }).then((res) => {
-        this.status.loadingItem = ''
-        this.emitter.emit('update-qty')
-        this.$httpMessageState(res, '已加入購物車')
-      }).catch(err => {
-        this.$swal({
-          icon: 'error',
-          title: `${err.data.message}`
-        })
-      })
-    },
-
-    // 增加數量按鈕
-    addNum () {
-      this.productCount += 1
-    },
-    // 減少數量按鈕
-    reduceNum () {
-      if (this.productCount >= 1) {
-        this.productCount -= 1
-      }
-    }
-
-  },
-
-  created () {
-    this.id = this.$route.params.productId
-    this.getProduct(this.id)
-    this.getProducts()
-  }
-
-}
-</script>

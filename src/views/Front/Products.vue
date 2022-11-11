@@ -1,31 +1,30 @@
 <template>
-<CustomLoading :active="isLoading"></CustomLoading>
+  <CustomLoading :active="isLoading" />
   <div class="container-fluid d-flex align-items-center justify-content-center px-0"  data-aos="fade-up"  data-aos-duration="800" data-aos-once="true" data-aos-delay="600">
-    <p class="en-font title fs-3-lg fs-4-md">ALL PRODUCTS</p>
-    <img src="@/assets/Products/banner.png" class="d-lg-block d-none w-100" alt="Carousel01">
-    <img src="@/assets/Index/Carousel/01-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
-    <img src="@/assets/Index/Carousel/01-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
+    <p class="en-font title fs-3-lg fs-4-md">所有產品</p>
+    <img src="@/assets/img/Products/banner.png" class="d-lg-block d-none w-100" alt="Carousel01">
+    <img src="@/assets/img/Index/Carousel/01-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
+    <img src="@/assets/img/Index/Carousel/01-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
   </div>
   <div class="container pt-5">
     <div class="row">
       <div class="col-md-3"  data-aos="fade-up"  data-aos-duration="800" data-aos-once="true" data-aos-delay="900">
         <!-- 篩選列表 -->
-        <div class="list-group mt-5 en-font" >
-          <a :class="{'active':productClass===''}"  @click.prevent="allProduct(item)" href="#" class="list-group-item list-group-item-action" aria-current="true">
-            所有產品
-          </a>
-          <a :class="{'active':item===productClass}" @click.prevent="changeProduct(item) " v-for="item in productfilter" :key="item.id" href="#" class="list-group-item list-group-item-action">
-              {{item}}
-          </a>
-
-        </div>
-        <!-- 篩選列表end -->
+          <div class="list-group mt-4 en-font" >
+            <a :class="{'active':productClass===''}"  @click.prevent="allProduct()" href="#" class="list-group-item list-group-item-action" aria-current="true">
+              所有產品
+            </a>
+            <a :class="{'active':item===productClass}" @click.prevent="changeProduct(item) " v-for="item in productFilter" :key="item.id" href="#" class="list-group-item list-group-item-action">
+                {{ item }}
+            </a>
+          </div>
 
       </div>
+
       <div class="col-md-9 my-4"  data-aos="fade-up"  data-aos-duration="800" data-aos-once="true" data-aos-delay="900">
           <!-- 產品資料 -->
           <div class="row">
-            <div class="col-md-6 col-lg-4 mt-3 px-md-2 px-4"   v-for="item in typeproducts" :key="item.id">
+            <div class="col-md-6 col-lg-4 px-md-2 px-4"   v-for="item in filterProduct" :key="item.id">
               <div class="card rounded-0">
                 <div class="bg-image"
                 :style="{backgroundImage: `url(${item.imageUrl})`}">
@@ -59,10 +58,8 @@
                         <i class="bi bi-cart3 p-0"></i>
                     </button>
                   </div>
-
                 </div>
               </div>
-
             </div>
           </div>
 
@@ -70,13 +67,192 @@
       </div>
     </div>
     <Pagination  v-if="productClass ===''" class="my-5" :pages="pagination" :product-class="productClass" @emit-pages="getProductPage" ></Pagination>
-
   </div>
-
 </template>
 
-<style scoped lang="scss">
+<script>
+import Pagination from '@/components/Pagination.vue'
+const storageMethods = {
+  getLikeItem () {
+    return JSON.parse(localStorage.getItem('MyFavorite'))
+  }
+}
+export default {
+  data () {
+    return {
+      products: [],
+      allProducts: [],
+      pagination: {},
+      pages: [],
+      productFilter: [],
+      productClass: '',
+      status: {
+        loadingItem: '' // 對應品項id
+      },
+      cart: {},
+      coupon_code: '',
+      orderId: '',
+      myFavorite: storageMethods.getLikeItem() || []
+    }
+  },
+  components: {
+    Pagination
+  },
+  inject: ['emitter'],
+  computed: {
+    filterProduct: function () {
+      return this.products.filter(item => item.category.match(this.productClass))
+    }
+  },
+  methods: {
+    getProducts () {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`
+      this.isLoading = true
+      this.$http.get(url).then((res) => {
+        if (res.data.success) {
+          this.allProducts = res.data.products
+          this.isLoading = false
+        }
+      }).catch(err => {
+        this.$swal({
+          icon: 'error',
+          title: `${err.data.message}`
+        })
+      })
+    },
 
+    getProductPage (page = 1) {
+      this.isLoading = true
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products?page=${page}`
+      this.$http.get(url).then((res) => {
+        if (res.data.success) {
+          this.products = res.data.products
+          this.pagination = res.data.pagination
+          this.isLoading = false
+          // 找出產品種類
+          this.products.filter(item => {
+            if (this.productFilter.indexOf(item.category) === -1) {
+              this.productFilter.push(item.category)
+              console.log(this.productFilter, 'filter')
+            }
+          })
+        }
+      }).catch(err => {
+        this.$swal({
+          icon: 'error',
+          title: `${err.data.message}`
+        })
+      })
+    },
+    allProduct () {
+      this.getProductPage()
+      this.productClass = ''
+    },
+    changeProduct (item) {
+      this.getProductPage()
+      this.productClass = item
+    },
+
+    // 取得收藏
+    getFavorite () {
+      this.myFavorite = storageMethods.getLikeItem() || []
+    },
+    // 加入收藏
+    addFavorite (data) {
+      this.myFavorite = storageMethods.getLikeItem() || []
+      if (JSON.stringify(this.myFavorite).includes(data.id)) {
+        this.myFavorite.forEach((item, index) => {
+          if (item.id === data.id) {
+            this.myFavorite.splice(index, 1)
+          }
+        })
+        const favoriteString = JSON.stringify(this.myFavorite)
+        localStorage.setItem('MyFavorite', favoriteString)
+        this.$swal({ icon: 'warning', title: '已從最愛中移除' })
+      } else {
+        this.myFavorite.push(data)
+        const dataString = JSON.stringify(this.myFavorite)
+        localStorage.setItem('MyFavorite', dataString)
+        this.myFavorite = JSON.parse(localStorage.getItem('MyFavorite'))
+        this.$swal({ icon: 'success', title: '儲存成功！' })
+      }
+      this.emitter.emit('favorite-qty')
+    },
+
+    addCart (id) {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
+      const cart = {
+        product_id: id,
+        qty: 1
+      }
+      this.status.loadingItem = id
+      this.isLoading = true
+
+      this.$http.post(url, { data: cart }).then((res) => {
+        if (res.data.success) {
+          this.status.loadingItem = ''
+          this.isLoading = false
+          this.getCart()
+          this.$httpMessageState(res, '已加入購物車')
+          this.emitter.emit('update-qty')
+        }
+      }).catch(err => {
+        this.$swal({
+          icon: 'error',
+          title: `${err.data.message}`
+        })
+      })
+    },
+    // 取得購物車列表
+    getCart () {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
+      this.$http.get(url).then((res) => {
+        this.cart = res.data.data
+      }).catch(err => {
+        this.$swal({
+          icon: 'error',
+          title: `${err.data.message}`
+        })
+      })
+    },
+    // 監聽購物車變動
+    updateCart (item) {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`
+      this.isLoading = true
+      this.status.loadingItem = item.id
+      const cart = {
+        product_id: item.product_id,
+        qty: item.qty
+      }
+      this.$http.put(url, { data: cart }).then((res) => {
+        this.getCart()
+        this.status.loadingItem = ''
+        this.isLoading = false
+      }).catch(err => {
+        this.$swal({
+          icon: 'error',
+          title: `${err.data.message}`
+        })
+      })
+    }
+
+  },
+
+  created () {
+    this.getCart()
+    this.getProducts()
+    this.getProductPage()
+    this.getFavorite()
+    this.emitter.emit('favorite-qty', this.myFavorite)
+    this.emitter.on('remove-data', (data) => {
+      this.getFavorite()
+    })
+  }
+
+}
+</script>
+
+<style scoped lang="scss">
 @import '@/assets/scss/main.scss';
 .title{
   position: absolute;
@@ -163,7 +339,6 @@ del{
   bottom: 0;
   margin: auto;
   background-color:rgba(0, 0, 0,0.5);
-  // height: 200px;
   line-height: 200px;
   opacity: 0;
   text-decoration: none;
@@ -174,200 +349,3 @@ del{
    opacity: 1;
 }
 </style>
-
-<script>
-import Pagination from '@/components/Pagination.vue'
-const storageMethods = {
-  getLikeItem () {
-    return JSON.parse(localStorage.getItem('MyFavorite'))
-  }
-}
-export default {
-  data () {
-    return {
-      products: [],
-      allproducts: [],
-      pagination: {},
-      pages: [],
-      // 商品類別
-      productfilter: [],
-      // 商品種類呈現
-      typeproducts: [],
-      // 點選樣式
-      productClass: '',
-      status: {
-        loadingItem: '' // 對應品項id
-      },
-
-      cart: {},
-      coupon_code: '',
-      orderId: '',
-      // 收藏清單
-      myFavorite: storageMethods.getLikeItem() || []
-    }
-  },
-  components: {
-    Pagination
-  },
-  inject: ['emitter'],
-  methods: {
-    // 取得所有資料
-    getProducts () {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`
-      // loading狀態判斷
-      this.isLoading = true
-      this.$http.get(url).then((res) => {
-        if (res.data.success) {
-          this.allproducts = res.data.products
-          this.isLoading = false
-        }
-      }).catch(err => {
-        this.$swal({
-          icon: 'error',
-          title: `${err.data.message}`
-        })
-      })
-    },
-
-    // 取得單頁資料
-    getProductPage (page = 1) {
-      this.isLoading = true
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products?page=${page}`
-      this.$http.get(url).then((res) => {
-        if (res.data.success) {
-          // 一開始呈現所有商品
-          this.products = res.data.products
-          this.typeproducts = this.products
-          this.pagination = res.data.pagination
-          this.isLoading = false
-          // 找出產品種類
-          this.products.filter(item => {
-            if (this.productfilter.indexOf(item.category) === -1) {
-              this.productfilter.push(item.category)
-            }
-          })
-        }
-      }).catch(err => {
-        this.$swal({
-          icon: 'error',
-          title: `${err.data.message}`
-        })
-      })
-    },
-    // 篩選所有產品
-    allProduct () {
-      this.typeproducts = this.products.filter(i => i.category !== '')
-      this.productClass = ''
-    },
-    // 篩選產品類別
-    changeProduct (item) {
-      // 必須以allproducts這個變數去做篩選
-      this.typeproducts = this.allproducts.filter((i) => {
-        if (item === i.category) {
-          return i
-        }
-      }
-      )
-      this.productClass = item
-    },
-
-    // 取得收藏
-    getFavorite () {
-      this.myFavorite = storageMethods.getLikeItem() || []
-    },
-    // 加入收藏
-    addFavorite (data) {
-      this.myFavorite = storageMethods.getLikeItem() || []
-      if (JSON.stringify(this.myFavorite).includes(data.id)) {
-        this.myFavorite.forEach((item, index) => {
-          if (item.id === data.id) {
-            this.myFavorite.splice(index, 1)
-          }
-        })
-        const favoriteString = JSON.stringify(this.myFavorite)
-        localStorage.setItem('MyFavorite', favoriteString)
-        this.$swal({ icon: 'warning', title: '已從最愛中移除' })
-      } else {
-        this.myFavorite.push(data)
-        const dataString = JSON.stringify(this.myFavorite)
-        localStorage.setItem('MyFavorite', dataString)
-        this.myFavorite = JSON.parse(localStorage.getItem('MyFavorite'))
-        this.$swal({ icon: 'success', title: '儲存成功！' })
-      }
-      this.emitter.emit('favorite-qty')
-    },
-
-    // 加入購物車
-    addCart (id) {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
-      const cart = {
-        product_id: id,
-        qty: 1
-      }
-      this.status.loadingItem = id
-      this.isLoading = true
-
-      this.$http.post(url, { data: cart }).then((res) => {
-        if (res.data.success) {
-          this.status.loadingItem = ''
-          this.isLoading = false
-          this.getCart()
-          this.$httpMessageState(res, '已加入購物車')
-
-          // 動態購物車數量
-          this.emitter.emit('update-qty')
-        }
-      }).catch(err => {
-        this.$swal({
-          icon: 'error',
-          title: `${err.data.message}`
-        })
-      })
-    },
-    // 取得購物車列表
-    getCart () {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
-      this.$http.get(url).then((res) => {
-        this.cart = res.data.data
-      }).catch(err => {
-        this.$swal({
-          icon: 'error',
-          title: `${err.data.message}`
-        })
-      })
-    },
-    // 監聽購物車變動
-    updateCart (item) {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`
-      this.isLoading = true
-      this.status.loadingItem = item.id
-      const cart = {
-        product_id: item.product_id,
-        qty: item.qty
-      }
-      this.$http.put(url, { data: cart }).then((res) => {
-        this.getCart()
-        this.status.loadingItem = ''
-      }).catch(err => {
-        this.$swal({
-          icon: 'error',
-          title: `${err.data.message}`
-        })
-      })
-    }
-
-  },
-
-  created () {
-    this.getCart()
-    this.getProducts()
-    this.getProductPage()
-    this.getFavorite()
-    this.emitter.emit('favorite-qty', this.myFavorite)
-    this.emitter.on('remove-data', (data) => {
-      this.getFavorite()
-    })
-  }
-
-}
-</script>

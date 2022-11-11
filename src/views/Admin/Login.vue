@@ -3,7 +3,7 @@
     <div class="container">
       <form class="row justify-content-center en-font" @submit.prevent="signIn">
         <div class="col-md-6">
-          <img src="../../assets/Nav/logo-bk.svg" class="img-fluid d-block mx-auto">
+          <img src="../../assets/img/Nav/logo-bk.svg" class="img-fluid d-block mx-auto" alt="logo">
           <h1 class="h3 mb-3 font-weight-normal en-font text-center mt-3">後台管理系統</h1>
           <div class="mb-2">
             <label for="inputEmail" class="sr-only">Email address</label>
@@ -30,26 +30,13 @@
           </div>
 
           <div class="text-end mt-4">
-            <button class="rounded-0 w-100 btn btn-lg btn-primary btn-block text-white" type="submit">Login</button>
+            <input class="rounded-0 w-100 btn btn-lg btn-primary btn-block text-white" type="submit" value="Login">
           </div>
         </div>
       </form>
     </div>
   </div>
-
 </template>
-
-<style scoped lang="scss">
-@import '@/assets/scss/main.scss';
-.login{
-  width: 100%;
-  height: 100vh;
-  background-image: url('../../assets/Admin/login.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-}
-</style>
 
 <script>
 export default {
@@ -77,7 +64,17 @@ export default {
         })
     }
   }
-
 }
-
 </script>
+
+<style scoped lang="scss">
+@import '@/assets/scss/main.scss';
+.login{
+  width: 100%;
+  height: 100vh;
+  background-image: url('../../assets/img/Admin/login.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+</style>

@@ -15,18 +15,16 @@
 
 <style lang="scss" scoped>
 @import "@/assets/scss/main.scss";
-
 .coupon{
   width: 80%;
 }
 .coupon-pic{
-  background-image: url('../../assets/Index/coupon.png');
+  background-image: url('../../assets/img/Index/coupon.png');
   background-size: 100%;
   background-repeat: no-repeat;
   background-position: 50% 50%;
   height:250px;
 }
-
 .text{
   font-size: 20px;
   font-weight: 600;

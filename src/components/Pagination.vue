@@ -1,12 +1,12 @@
 <template>
   <nav aria-label="Page navigation example" >
     <ul class="pagination justify-content-center">
-      <li class="page-item" @click.prevent="updatePage(pages.current_page-1)">
+      <li class="page-item me-2" @click.prevent="updatePage(pages.current_page-1)">
         <a class="page-link" href="#" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <li class="page-item" v-for="page in pages.total_pages" :key="page"
+      <li class="page-item me-2" v-for="page in pages.total_pages" :key="page"
       :class="{ 'active': page === pages.current_page }">
         <a class="page-link" href="#" @click.prevent="updatePage(page)">
           {{ page }}
@@ -22,18 +22,13 @@
 </template>
 
 <script>
-// :pages="{ 頁碼資訊 }"
-// @emitPages="更新頁面事件"
 export default {
-// 傳入pagination
   props: ['pages', 'productClass'],
   emits: ['emit-pages'],
-
   methods: {
     updatePage (currentpage) {
       this.$emit('emit-pages', currentpage)
     }
-
   }
 }
 </script>

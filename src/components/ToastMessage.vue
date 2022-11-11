@@ -1,18 +1,11 @@
 <template>
-    <div  class=""
-    style="z-index: 1500">
+  <div style="z-index: 1500">
     <Toast v-for="(msg, key) in messages" :key="key"
       :msg="msg"
     />
   </div>
-
 </template>
-<style lang="scss" scoped>
 
-  .btn-close{
-    color: #fff;
-  }
-</style>
 <script>
 import Toast from '@/components/Toast.vue'
 export default {
@@ -41,3 +34,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .btn-close{
+    color: #fff;
+  }
+</style>

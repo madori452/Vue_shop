@@ -18,22 +18,19 @@
                 <h5>用戶資料</h5>
                 <tr>
                   <th for="title">姓名</th>
-                  <td>{{tempOrder.user.name}}</td>
+                  <td>{{ tempOrder.user.name }}</td>
                 </tr>
-
                 <tr>
                   <th for="title">Email</th>
-                  <td>{{tempOrder.user.email}}</td>
+                  <td>{{ tempOrder.user.email }}</td>
                 </tr>
-
                 <tr>
                   <th for="title">電話</th>
-                  <td>{{tempOrder.user.tel}}</td>
+                  <td>{{ tempOrder.user.tel }}</td>
                 </tr>
-
                 <tr>
                   <th for="title">地址</th>
-                  <td>{{tempOrder.user.address}}</td>
+                  <td>{{ tempOrder.user.address }}</td>
                 </tr>
               </div>
              <div class="col-md-6">
@@ -72,7 +69,6 @@
           </div>
         </div>
         <div class="modal-footer">
-
           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
             取消
           </button>
@@ -88,11 +84,10 @@
     </div>
 </div>
 </template>
+
 <script>
 import modalMixin from '@/mixins/modalMixin'
-
 export default {
-
   props: {
     order: {
       type: Object,
@@ -116,7 +111,5 @@ export default {
       this.$emit('update', tempOrder)
     }
   }
-
 }
-
 </script>

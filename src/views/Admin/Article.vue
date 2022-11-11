@@ -1,45 +1,39 @@
 <template>
-<Loading :active="isLoading"></Loading>
-<button @click="openModal(true)" class="btn btn-primary px-5 rounded-0 text-white mt-3" type="button">新增文章</button>
-    <table class="table mt-4">
-        <thead>
+  <Loading :active="isLoading"/>
+  <button @click="openModal(true)" class="btn btn-primary px-5 rounded-0 text-white mt-3" type="button">新增文章</button>
+  <table class="table mt-4">
+      <thead>
+      <tr>
+        <th>文章標題</th>
+        <th>文章作者</th>
+        <th>創建日期</th>
+        <th>文章分類</th>
+        <th>是否公開</th>
+        <th>編輯</th>
+      </tr>
+      </thead>
+      <tbody v-for="item in articles" :key="item.title">
         <tr>
-          <th>文章標題</th>
-          <th>文章作者</th>
-          <th>創建日期</th>
-          <th>文章分類</th>
-          <th>是否公開</th>
-          <th>編輯</th>
+          <td>{{ item.title }}</td>
+          <td>{{ item.author }}</td>
+          <td>{{ item.create_at }}</td>
+          <td>{{ item.tag }}</td>
+          <td>
+          <li v-if="item.isPublic===true">是</li>
+          <li v-else>否</li>
+          </td>
+
+          <td>
+            <button  @click="openModal(false,item)" type="button"  class="btn btn-outline-primary btn-sm">檢視</button>
+            <button @click="opendelModal(item)" type="button" class="btn btn-outline-danger btn-sm">刪除</button>
+          </td>
         </tr>
-        </thead>
-        <tbody v-for="item in articles" :key="item.title">
-          <tr>
-           <td>{{item.title}}</td>
-           <td>{{item.author}}</td>
-           <td>{{item.create_at}}</td>
-           <td>{{item.tag}}</td>
-           <td>
-            <li v-if="item.isPublic===true">是</li>
-            <li v-else>否</li>
-           </td>
-
-            <td>
-              <button  @click="openModal(false,item)"  class="btn btn-outline-primary btn-sm">檢視</button>
-              <button @click="opendelModal(item)" class="btn btn-outline-danger btn-sm">刪除</button>
-            </td>
-          </tr>
-        </tbody>
-    </table>
-    <Pagination :pages="pagination" @emit-pages="getArticles"></Pagination>
-    <ArticleModal ref="articleModal" :article="tempArticle" @update="updateArticle" ></ArticleModal>
-    <DelModal ref="delModal" :item="tempArticle" @del-item="delArticle"></DelModal>
-
+      </tbody>
+  </table>
+  <Pagination :pages="pagination" @emit-pages="getArticles"></Pagination>
+  <ArticleModal ref="articleModal" :article="tempArticle" @update="updateArticle" ></ArticleModal>
+  <DelModal ref="delModal" :item="tempArticle" @del-item="delArticle"></DelModal>
 </template>
-<style scoped>
-li{
-  list-style: none;
-}
-</style>
 
 <script>
 import DelModal from '@/components/DelModal.vue'
@@ -170,3 +164,9 @@ export default {
   }
 }
 </script>
+
+<style scoped lang="scss">
+li{
+  list-style: none;
+}
+</style>

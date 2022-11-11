@@ -1,6 +1,5 @@
 <template>
-<Loading :active="isLoading"></Loading>
-
+  <Loading :active="isLoading" />
   <table class="table pt-5">
     <thead>
     <tr>
@@ -16,23 +15,21 @@
       <tr>
         <td>{{$filters.date(item.create_at)}} </td>
         <td>{{item.user.email}}</td>
-
         <td>
           <li v-for="(product, i) in item.products" :key="i">
-            {{product.product.title}} &nbsp; 數量: {{product.qty}} &nbsp; 單位: {{product.product.unit}}
+            {{ product.product.title }} &nbsp; 數量: {{ product.qty }} &nbsp; 單位: {{ product.product.unit }}
           </li>
         </td>
-
         <td>
-          {{Math.round(item.total)}}
+          {{ Math.round(item.total) }}
         </td>
         <td>
           <li v-if="item.is_paid===true">是</li>
           <li v-else>否</li>
         </td>
         <td>
-          <button @click="openModal(false,item)"  class="btn btn-outline-primary btn-sm">檢視</button>
-          <button @click="openDelOrderModal(item)" class="btn btn-outline-danger btn-sm">刪除</button>
+          <button @click="openModal(false,item)" type="button"  class="btn btn-outline-primary btn-sm">檢視</button>
+          <button @click="openDelOrderModal(item)" type="button" class="btn btn-outline-danger btn-sm">刪除</button>
         </td>
       </tr>
     </tbody>
@@ -40,20 +37,12 @@
   <Pagination :pages="pagination" @emit-pages="getOrders"></Pagination>
   <OrdertModal ref="orderModal" :order="tempOrder" @update="updatePaid" ></OrdertModal>
   <DelModal :item="tempOrder" ref="delModal" @del-item="delOrder"></DelModal>
-
 </template>
-<style scoped>
-li{
-  list-style: none;
-}
-
-</style>
 
 <script>
 import DelModal from '@/components/DelModal.vue'
 import Pagination from '@/components/Pagination.vue'
 import OrdertModal from '@/components/OrderModal.vue'
-
 export default {
   data () {
     return {
@@ -101,6 +90,7 @@ export default {
       this.$http.delete(url).then((res) => {
         this.$httpMessageState(res, '刪除訂單')
         const delComponent = this.$refs.delModal
+        this.isLoading = false
         delComponent.hideModal()
         this.getOrders()
       }).catch(err => {
@@ -125,6 +115,7 @@ export default {
         this.$httpMessageState(res, '更改訂單付款狀態')
         const orderComponent = this.$refs.orderModal
         orderComponent.hideModal()
+        this.isLoading = false
         this.getOrders()
       }).catch(err => {
         this.$swal({
@@ -135,10 +126,14 @@ export default {
     }
 
   },
-
   created () {
     this.getOrders()
   }
-
 }
 </script>
+
+<style scoped lang="scss">
+li{
+  list-style: none;
+}
+</style>

@@ -38,7 +38,7 @@
                   @change="uploadFile"
                 />
               </div>
-              <img class="img-fluid" :src="tempProduct.imageUrl" alt="" />
+              <img class="img-fluid" :src="tempProduct.imageUrl" alt="上傳圖片" />
               <!-- 延伸技巧，多圖 -->
               <div class="mt-5" v-if="tempProduct.images">
                 <div v-for="(image, key) in tempProduct.images" class="mb-3 input-group" :key="key">
@@ -62,6 +62,7 @@
                   "
                 >
                   <button
+                    type="button"
                     class="btn btn-outline-primary btn-sm d-block w-100"
                     @click="tempProduct.images.push('')"
                   >
@@ -184,21 +185,18 @@
     </div>
 </div>
 </template>
+
 <script>
 import modalMixin from '@/mixins/modalMixin'
-
 export default {
   mixins: [modalMixin],
   props: {
-    // tempProduct傳入
     product: {
       type: Object,
-      // 如果無東西傳入，預設為空物件
       default () { return {} }
     }
   },
   watch: {
-    // 監聽props傳入的produt內容是否有變動
     product () {
       this.tempProduct = this.product
     }
@@ -232,9 +230,7 @@ export default {
         })
       })
     }
-
   }
-
 }
 
 </script>

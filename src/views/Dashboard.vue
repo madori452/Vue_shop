@@ -1,34 +1,18 @@
 <template>
-  <Nav></Nav>
-
-<div class="container-fluid px-5 pt-5 dashboard en-font">
-    <router-view/>
-    <ToastMessages></ToastMessages>
-</div>
+  <Navbar></Navbar>
+  <div class="container-fluid px-5 pt-5 dashboard en-font">
+      <router-view/>
+      <ToastMessages></ToastMessages>
+  </div>
 </template>
-<style scoped lang="scss">
-@import '../assets/scss/main.scss';
-html,body{
-  height: 100%;
-}
-.dashboard{
-  background-image: url('../assets/Admin/bg02.png');
-  background-size: cover;
-  background-position: 50% 50%;
-  width: 100%;
-  height: 100vh;
-  top:-20px;
-  position: relative;
 
-}
-</style>
 <script>
-import Nav from '../components/Navbar.vue'
+import Navbar from '../components/Navbar.vue'
 import emitter from '../methods/emitter'
 import ToastMessages from '../components/ToastMessage.vue'
 export default {
   components: {
-    Nav,
+    Navbar,
     ToastMessages
   },
   provide () {
@@ -52,5 +36,21 @@ export default {
     })
   }
 }
-
 </script>
+
+<style scoped lang="scss">
+@import '../assets/scss/main.scss';
+html,body{
+  height: 100%;
+}
+.dashboard{
+  background-image: url('../assets/img/Admin/bg02.png');
+  background-size: cover;
+  background-position: 50% 50%;
+  width: 100%;
+  height: 100vh;
+  top:-20px;
+  position: relative;
+
+}
+</style>

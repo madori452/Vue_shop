@@ -1,5 +1,4 @@
 <template>
-
   <router-view/>
   <Top></Top>
 </template>
@@ -10,7 +9,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Rufina&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap');
 body{
-  font-family: 'Noto Sans TC', sans-serif !important;
+  font-family: 'Noto Sans TC', sans-serif;
   background-color: $secondary;
   color: $text_bk;
   overflow-x: hidden;
@@ -34,8 +33,9 @@ body{
   margin-top: 100px;
 }
 </style>
+
 <script>
-import Top from '../src/components/front/top.vue'
+import Top from '../src/components/front/Top.vue'
 export default {
   components: {
     Top

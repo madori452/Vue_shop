@@ -1,11 +1,11 @@
 <template>
-  <CustomLoading :active="isLoading"></CustomLoading>
+  <CustomLoading :active="isLoading" />
   <!-- Banner -->
   <div class="container-fluid d-flex align-items-center justify-content-center px-0">
     <h4 class="en-font">CART</h4>
-    <img src="@/assets/Cart/banner-cart.png" class="d-lg-block d-none w-100" alt="banner">
-    <img src="@/assets/Cart/cart-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
-    <img src="@/assets/Cart/cart-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
+    <img src="@/assets/img/Cart/banner-cart.png" class="d-lg-block d-none w-100" alt="banner">
+    <img src="@/assets/img/Cart/cart-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
+    <img src="@/assets/img/Cart/cart-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
   </div>
 
   <!-- 內容 -->
@@ -38,7 +38,7 @@
           <tbody>
             <tr>
               <td>訂單編號</td>
-              <td>{{orderId}}</td>
+              <td>{{ orderId }}</td>
               <td></td>
             </tr>
           </tbody>
@@ -46,7 +46,7 @@
           <tbody>
             <tr>
               <td>建立日期</td>
-              <td>{{$filters.date(create_at)}}</td>
+              <td>{{ $filters.date(create_at) }}</td>
               <td></td>
             </tr>
           </tbody>
@@ -64,15 +64,15 @@
           <tr v-for="item in order.products" :key="item.id" style="height:100px">
             <td style="width: 100px; height:60px; background-size: cover; background-position: center"
              :style="{backgroundImage: `url(${item.product.imageUrl})`}"></td>
-            <td class="ps-3">{{item.product.title}}</td>
+            <td class="ps-3">{{ item.product.title }}</td>
             <td>{{item.qty}} / {{ item.product.unit }}</td>
-            <td class="text-end">{{Math.round(item.final_total)}}</td>
+            <td class="text-end">{{ Math.round(item.final_total) }}</td>
           </tr>
           </tbody>
           <tfoot>
           <tr>
             <td colspan="3" class="text-end">總計</td>
-            <td class="text-end">{{Math.round(order.total)}}</td>
+            <td class="text-end">{{ Math.round(order.total) }}</td>
           </tr>
           </tfoot>
         </table>
@@ -81,19 +81,19 @@
           <tbody>
           <tr>
             <th width="100">Email</th>
-            <td>{{order.user.email}}</td>
+            <td>{{ order.user.email }}</td>
           </tr>
           <tr>
             <th>姓名</th>
-            <td>{{order.user.name}}</td>
+            <td>{{ order.user.name }}</td>
           </tr>
           <tr>
             <th>收件人電話</th>
-            <td>{{order.user.tel}}</td>
+            <td>{{ order.user.tel }}</td>
           </tr>
           <tr>
             <th>收件人地址</th>
-            <td>{{order.user.address}}</td>
+            <td>{{ order.user.address }}</td>
           </tr>
           <tr>
             <th>付款狀態</th>
@@ -105,16 +105,72 @@
           </tbody>
         </table>
 
-        <div class="text-end" v-if="order.is_paid === false">
-          <button class="btn btn-primary px-4 text-white en-font rounded-0">確認付款去</button>
+        <div class="text-center" v-if="order.is_paid === false">
+          <input value="確認付款去" type="submit" class="btn btn-primary px-4 text-white en-font rounded-0">
+        </div>
+
+        <div class="text-center" v-if="order.is_paid === true">
+          <router-link to="../../user/products">
+            <input value="再去逛逛" type="submit" class="btn btn-primary px-4 text-white en-font rounded-0">
+          </router-link>
         </div>
       </form>
     </div>
-
   </div>
-
 </div>
 </template>
+
+<script>
+export default {
+  inject: ['emitter'],
+  data () {
+    return {
+      order: {
+        user: {}
+      },
+      orderId: '',
+      isLoading: false,
+      is_paid: false,
+      create_at: ''
+    }
+  },
+  methods: {
+    getOrder () {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order/${this.orderId}`
+      this.$http.get(url).then((res) => {
+        if (res.data.success) {
+          this.order = res.data.order
+          this.create_at = res.data.order.create_at
+          this.emitter.emit('update-qty')
+        }
+      }).catch(err => {
+        this.$swal({
+          icon: 'error',
+          title: `${err.data.message}`
+        })
+      })
+    },
+    payOrder () {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/pay/${this.orderId}`
+      this.$http.post(url).then((res) => {
+        if (res.data.success) {
+          this.getOrder()
+          this.is_paid = true
+        }
+      }).catch(err => {
+        this.$swal({
+          icon: 'error',
+          title: `${err.data.message}`
+        })
+      })
+    }
+  },
+  created () {
+    this.orderId = this.$route.params.orderId
+    this.getOrder()
+  }
+}
+</script>
 
 <style scoped lang="scss">
 @import '@/assets/scss/main.scss';
@@ -178,60 +234,6 @@ p.step{
 }
 
 .primary{
-  background-color: $primary !important;
+  background-color: $primary ;
 }
 </style>
-<script>
-export default {
-  inject: ['emitter'],
-
-  data () {
-    return {
-      order: {
-        user: {}
-      },
-      orderId: '',
-      isLoading: false,
-      is_paid: false,
-      create_at: ''
-    }
-  },
-  methods: {
-    getOrder () {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order/${this.orderId}`
-      this.$http.get(url).then((res) => {
-        if (res.data.success) {
-          this.order = res.data.order
-          this.create_at = res.data.order.create_at
-          this.emitter.emit('update-qty')
-        }
-      }).catch(err => {
-        this.$swal({
-          icon: 'error',
-          title: `${err.data.message}`
-        })
-      })
-    },
-    payOrder () {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/pay/${this.orderId}`
-      this.$http.post(url).then((res) => {
-        if (res.data.success) {
-          this.getOrder()
-          this.is_paid = true
-        }
-      }).catch(err => {
-        this.$swal({
-          icon: 'error',
-          title: `${err.data.message}`
-        })
-      })
-    }
-  },
-  created () {
-    this.orderId = this.$route.params.orderId
-    this.getOrder()
-  }
-
-}
-
-</script>

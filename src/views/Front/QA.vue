@@ -1,9 +1,9 @@
 <template>
   <div class="container-fluid d-flex align-items-center justify-content-center px-0">
     <p class="en-font title fs-3-lg fs-4-md mb-0">QA</p>
-    <img src="@/assets/QA.png" class="d-lg-block d-none w-100" alt="banner">
-    <img src="@/assets/QA-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
-    <img src="@/assets/QA-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
+    <img src="@/assets/img/QA/QA.png" class="d-lg-block d-none w-100" alt="banner">
+    <img src="@/assets/img/QA/QA-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
+    <img src="@/assets/img/QA/QA-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
   </div>
   <div class="container mx-auto py-4 mt-4">
     <div class="section">
@@ -23,7 +23,6 @@
       <p class="fs-6 text-900">均屬蠟燭正常現象，可安心使用。</p>
     </div>
   </div>
-
 </template>
 
 <style scoped lang="scss">
@@ -31,8 +30,8 @@
 .title{
   position: absolute;
   z-index: 2;
+  margin-top: 40px;
   font-size: $text_titile;
-
   @include phone{
     font-size: 20px;
   }

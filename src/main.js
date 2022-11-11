@@ -29,9 +29,7 @@ import $httpMessageState from './methods/pushMessageState'
 // 匯入 vee-validate 主套件
 
 import {
-
   Field, Form, ErrorMessage, defineRule, configure
-
 } from 'vee-validate'
 
 // 匯入 vee-validate 相關規則

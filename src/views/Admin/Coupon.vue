@@ -1,6 +1,6 @@
 <template>
-<Loading :active="isLoading"></Loading>
-  <button class="btn btn-primary px-5 rounded-0 text-white mt-2" @click="openCouponModal(true)">
+  <Loading :active="isLoading" />
+  <button type="button" class="btn btn-primary px-5 rounded-0 text-white mt-2" @click="openCouponModal(true)">
       建立新的優惠券
   </button>
 
@@ -16,9 +16,9 @@
     </thead>
     <tbody v-for="(item, key) in coupons" :key="key">
         <tr>
-        <td>{{item.code}}</td>
-        <td>{{item.percent}}%</td>
-        <td>{{$filters.date(item.due_date)}}</td>
+        <td>{{ item.code }}</td>
+        <td>{{ item.percent }}%</td>
+        <td>{{ $filters.date(item.due_date) }}</td>
 
         <td>
             <span class="text-success" v-if="item.is_enabled==1">啟用</span>
@@ -26,8 +26,8 @@
         </td>
         <td class="d-flex justify-content-center">
             <div class="btn-group">
-            <button @click="openCouponModal(false, item)" class="btn btn-outline-primary btn-sm">編輯</button>
-            <button @click="openDelCouponModal(item)" class="btn btn-outline-danger btn-sm">刪除</button>
+            <button @click="openCouponModal(false, item)" type="button" class="btn btn-outline-primary btn-sm">編輯</button>
+            <button @click="openDelCouponModal(item)" type="button" class="btn btn-outline-danger btn-sm">刪除</button>
             </div>
         </td>
         </tr>
@@ -129,6 +129,7 @@ export default {
       this.$http.delete(url).then((response) => {
         this.$httpMessageState(response, '刪除優惠券')
         const delComponent = this.$refs.delModal
+        this.isLoading = false
         delComponent.hideModal()
         this.getCoupons()
       }).catch(err => {
@@ -140,10 +141,8 @@ export default {
     }
 
   },
-
   created () {
     this.getCoupons()
   }
-
 }
 </script>

@@ -19,13 +19,11 @@ export default {
   props: {
     active: Boolean
   }
-
 }
 </script>
 
 <style lang="scss" scoped>
 @import "../assets/scss/main.scss";
-
 body {
   position: fixed;
   width: 100%;

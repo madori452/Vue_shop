@@ -1,12 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import Home from '../views/Home.vue'
 
 const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
 
   {
     path: '/login',
@@ -42,28 +36,28 @@ const routes = [
     // 用戶端導覽列
     component: () => import('../views/Front/UserDashboard'),
     children: [
-
       {
-      // 用戶端首頁
+        path: '/',
+        name: 'Home',
+        component: () => import('../views/Front/Index')
+      },
+      {
         path: 'index',
         component: () => import('../views/Front/Index')
-      }, {
-      // 用戶端產品列表
+      },
+      {
         path: 'products',
         component: () => import('../views/Front/Products')
       },
       {
-      // 用戶端單一產品
         path: 'product/:productId',
         component: () => import('../views/Front/Product')
       },
-      // 用戶端購物車
       {
         path: 'cart',
         component: () => import('../views/Front/Cart')
       },
 
-      // 用戶端文章
       {
         path: 'articles',
         component: () => import('../views/Front/Articles')
@@ -72,12 +66,11 @@ const routes = [
         path: 'article/:articleId',
         component: () => import('../views/Front/Article')
       },
-      // 用戶端隱私
+      // 用端隱私
       {
         path: 'privacy',
         component: () => import('../views/Front/Privacy')
       },
-      // 用戶QA
       {
         path: 'question',
         component: () => import('../views/Front/QA')
@@ -94,6 +87,10 @@ const routes = [
       path: 'checkout/:orderId',
       component: () => import('../views/Front/Checkout')
     }]
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    component: () => import('../views/NotFound.vue')
   }
 ]
 

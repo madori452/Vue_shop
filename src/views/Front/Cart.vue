@@ -1,11 +1,11 @@
 <template>
-  <CustomLoading :active="isLoading"></CustomLoading>
+  <CustomLoading :active="isLoading" />
   <!-- Banner -->
   <div class="container-fluid d-flex align-items-center justify-content-center px-0">
     <h4 class="en-font">CART</h4>
-    <img src="@/assets/Cart/banner-cart.png" class="d-lg-block d-none w-100" alt="banner">
-    <img src="@/assets/Cart/cart-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
-    <img src="@/assets/Cart/cart-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
+    <img src="@/assets/img/Cart/banner-cart.png" class="d-lg-block d-none w-100" alt="banner">
+    <img src="@/assets/img/Cart/cart-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
+    <img src="@/assets/img/Cart/cart-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
   </div>
   <!-- 內容 -->
   <div class="container">
@@ -34,7 +34,7 @@
             <div class="go-shop mx-auto d-flex justify-content-center align-items-center flex-column">
               <h5 class="text-primary en-font">目前還沒有商品！快去選購吧</h5>
               <router-link to="../user/products">
-                <button class="shop btn btn-primary py-2 px-5 text-white rounded-0">選擇商品</button>
+                <button type="button" class="shop btn btn-primary py-2 px-5 text-white rounded-0">選擇商品</button>
               </router-link>
             </div>
           </div>
@@ -46,16 +46,16 @@
               <table class="table align-middle px-4">
                 <thead>
                   <tr>
-                    <th></th>
-                    <th style="width: 230px">品名</th>
-                    <th style="width: 110px">數量</th>
-                    <th class="text-end">單價</th>
+                    <th class="remove-item"></th>
+                    <th class="title-item">品名</th>
+                    <th class="qty-item">數量</th>
+                    <th class="price-item text-end">單價</th>
                   </tr>
                 </thead>
                 <tbody>
                 <template v-if="cart.carts">
                   <tr v-for="item in cart.carts" :key="item.id">
-                    <td>
+                    <td class="px-0">
                       <button type="button" class="btn btn-outline-primary btn-sm btn-cancel"
                               :disabled="status.loadingItem === item.id"
                               @click="removeCartItem(item.id)">
@@ -63,26 +63,27 @@
                       </button>
                     </td>
                     <td>
-                      {{ item.product.title }}
+                      <span class="product_title">{{ item.product.title }}</span>
                       <div class="text-success" v-if="item.coupon">
                         已套用優惠券
                       </div>
                     </td>
                     <td>
                       <div class="input-group input-group-sm">
-                        <input type="number"
-                              class="form-control"
-                              min="1"
-                              v-model.number="item.qty"
-                              @change="updateCart(item)"
-                              :disabled="item.id===status.loadingItem"
-                              style="width:30px">
-                        <span class="input-group-text">/{{ item.product.unit }}</span>
+                        <button type="button" :disabled="item.qty===1" @click="reduceNum(item)"
+                            class="btn btn-primary btn-sm rounded-0">
+                            -
+                        </button>
+                        <span :disabled="item.id===status.loadingItem" class="qty_input border border-2 text-center">{{ item.qty }}</span>
+                        <button type="button" @click="addNum(item)" class="btn btn-primary btn-sm rounded-0">
+                            +
+                        </button>
+
                       </div>
                     </td>
                     <td class="text-end">
                       <small v-if="cart.final_total !== cart.total" class="text-success">折扣價：</small>
-                      {{ $filters.currency(item.final_total) }}
+                      <span class="product_price">{{ $filters.currency(item.final_total) }}</span>
                     </td>
                   </tr>
                 </template>
@@ -90,14 +91,13 @@
                 <tfoot>
                 <tr>
                   <td colspan="3" class="text-end">總計</td>
-                  <td class="text-end">{{ $filters.currency(cart.total) }}</td>
+                  <td class="text-end price-total">{{ $filters.currency(cart.total) }}</td>
                 </tr>
                 <tr v-if="cart.final_total !== cart.total">
                   <td colspan="3" class="text-end text-success">折扣價</td>
                   <td class="text-end text-success">{{ $filters.currency(cart.final_total) }}</td>
                 </tr>
                 </tfoot>
-
               </table>
               <!-- 優惠卷 -->
               <div class="row w-100 m-0 coupon-code">
@@ -108,7 +108,6 @@
                     </button>
                 </div>
               </div>
-
             </div>
           </div>
           <!-- 表格 -->
@@ -160,7 +159,7 @@
                                 v-model="form.message"></textarea>
                     </div>
                     <div class="text-end">
-                      <button class="btn btn-primary w-100 mb-5 py-2 text-white rounded-0" >送出訂單</button>
+                      <input type="submit" class="btn btn-primary w-100 mb-5 py-2 text-white rounded-0" value="送出訂單">
                     </div>
                   </Form>
               </div>
@@ -171,6 +170,129 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  data () {
+    return {
+      form: {
+        user: {
+          name: '',
+          email: '',
+          tel: '',
+          address: ''
+        },
+        message: ''
+      },
+      status: {
+        loadingItem: '' // 對應品項id
+      },
+      isLoading: false,
+      cart: {},
+      coupon_code: ''
+    }
+  },
+
+  inject: ['emitter'],
+  methods: {
+
+    // 取得購物車列表
+    getCart () {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
+      this.isLoading = true
+      this.$http.get(url).then((res) => {
+        this.cart = res.data.data
+        this.isLoading = false
+      })
+    },
+    // 監聽購物車變動
+    updateCart (item) {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`
+      this.isLoading = true
+      this.status.loadingItem = item.id
+      const cart = {
+        product_id: item.product_id,
+        qty: item.qty
+      }
+      this.$http.put(url, { data: cart }).then((res) => {
+        this.isLoading = false
+        this.getCart()
+        this.status.loadingItem = ''
+      }).catch(err => {
+        this.$swal({
+          icon: 'error',
+          title: `${err.data.message}`
+        })
+      })
+    },
+    addCouponCode () {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/coupon`
+      const coupon = {
+        code: this.coupon_code
+      }
+      this.$http.post(url, { data: coupon }).then((res) => {
+        this.$httpMessageState(res, '加入優惠券')
+        this.getCart()
+      }).catch(err => {
+        this.$swal({
+          icon: 'error',
+          title: `${err.data.message}`
+        })
+      })
+    },
+    removeCartItem (id) {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${id}`
+      this.isLoading = true
+      this.status.loadingItem = id
+      this.$http.delete(url).then((res) => {
+        this.status.loadingItem = ''
+        this.emitter.emit('update-qty')
+
+        this.$httpMessageState(res, '刪除購物車品項')
+        this.getCart()
+        this.isLoading = false
+      }).catch(err => {
+        this.$swal({
+          icon: 'error',
+          title: `${err.data.message}`
+        })
+      })
+    },
+    // 建立訂單
+    createOrder () {
+      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order`
+      const order = this.form
+      this.$http.post(url, { data: order })
+        .then((res) => {
+          this.orderId = res.data.orderId
+          this.$router.push(`/checkout/${this.orderId}`)
+        }).catch(err => {
+          this.$swal({
+            icon: 'error',
+            title: `${err.data.message}`
+          })
+        })
+    },
+    addNum (item) {
+      if (item.product_id === item.product.id) {
+        item.qty += 1
+        this.updateCart(item)
+      }
+    },
+    // 減少數量按鈕
+    reduceNum (item) {
+      if (item.product_id === item.product.id) {
+        item.qty -= 1
+        this.updateCart(item)
+      }
+    }
+
+  },
+  created () {
+    this.getCart()
+  }
+}
+</script>
 
 <style scoped lang="scss">
 @import '@/assets/scss/main.scss';
@@ -198,11 +320,10 @@ h4.en-font{
     left: calc(50% - 158px);
   }
   @include phone{
-    width: 263px;
-    left: calc(50% - 130px);
+    width: 298px;
+    left: calc(50% - 149px);
   }
 }
-
 .step-line ul{
   width: 500px;
   @include phone{
@@ -232,8 +353,65 @@ p.step{
   font-size: 20px;
   background-color: #aaa;
 }
+.product_price,.price-total{
+  @include phone{
+    font-size: 14px;
+  }
+}
 .primary{
-  background-color: $primary !important;
+  background-color: $primary ;
+}
+.remove-item{
+  width: 10%;
+}
+.title-item{
+  width: 50%;
+  @include phone{
+    font-size: 14px;
+  }
+  @include phone-sm{
+    width: 47%;
+  }
+}
+.qty-item{
+  width: 25%;
+  @include phone{
+    width: 100px;
+    font-size: 14px;
+  }
+  @include phone{
+    width: 26%;
+  }
+  @include phone-s{
+    width: 47%;
+  }
+}
+.price-item{
+  width: 50px;
+  @include phone{
+    width: 72px;
+    font-size: 14px;
+  }
+}
+.text-success{
+  @include phone{
+    font-size: 13px;
+  }
+}
+span.border.qty_input{
+  width: 40px;
+  font-size: 15px;
+  @include phone{
+    width: 30px;
+    font-size: 14px;
+    line-height: 26px;
+  }
+}
+span.product_title{
+  font-size: 16px;
+  @include phone{
+     font-size: 14px;
+  }
 }
 .cart-list-menu{
   position: relative;
@@ -287,117 +465,3 @@ button.coupon{
   }
 }
 </style>
-
-<script>
-
-export default {
-  data () {
-    return {
-      form: {
-        user: {
-          name: '',
-          email: '',
-          tel: '',
-          address: ''
-        },
-        message: ''
-      },
-      status: {
-        loadingItem: '' // 對應品項id
-      },
-      isLoading: false,
-      cart: {},
-      coupon_code: ''
-    }
-  },
-
-  inject: ['emitter'],
-  methods: {
-
-    // 取得購物車列表
-    getCart () {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
-      this.isLoading = true
-      this.$http.get(url).then((res) => {
-        this.cart = res.data.data
-        this.isLoading = false
-      })
-    },
-    // 監聽購物車變動
-    updateCart (item) {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`
-      this.isLoading = true
-      this.status.loadingItem = item.id
-      const cart = {
-        product_id: item.product_id,
-        qty: item.qty
-      }
-      this.$http.put(url, { data: cart }).then((res) => {
-        this.getCart()
-        this.status.loadingItem = ''
-      }).catch(err => {
-        this.$swal({
-          icon: 'error',
-          title: `${err.data.message}`
-        })
-      })
-    },
-    // 套用優惠卷
-    addCouponCode () {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/coupon`
-      const coupon = {
-        code: this.coupon_code
-      }
-      this.$http.post(url, { data: coupon }).then((res) => {
-        this.$httpMessageState(res, '加入優惠券')
-        this.getCart()
-      }).catch(err => {
-        this.$swal({
-          icon: 'error',
-          title: `${err.data.message}`
-        })
-      })
-    },
-    // 移除購物車內容
-    removeCartItem (id) {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${id}`
-      this.isLoading = true
-      this.status.loadingItem = id
-      this.$http.delete(url).then((res) => {
-        this.status.loadingItem = ''
-        this.emitter.emit('update-qty')
-
-        this.$httpMessageState(res, '刪除購物車品項')
-        this.getCart()
-        this.isLoading = false
-      }).catch(err => {
-        this.$swal({
-          icon: 'error',
-          title: `${err.data.message}`
-        })
-      })
-    },
-    // 建立訂單
-    createOrder () {
-      const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/order`
-      const order = this.form
-      this.$http.post(url, { data: order })
-        .then((res) => {
-          this.orderId = res.data.orderId
-          this.$router.push(`/checkout/${this.orderId}`)
-        }).catch(err => {
-          this.$swal({
-            icon: 'error',
-            title: `${err.data.message}`
-          })
-        })
-    }
-
-  },
-
-  created () {
-    this.getCart()
-  }
-
-}
-</script>

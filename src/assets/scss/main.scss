@@ -1,5 +1,5 @@
 // color
-$primary: #A49D73 ;
+$primary: #807744 ;
 $secondary:#FCF8F3;
 
 // text-color
@@ -13,7 +13,7 @@ $text_titile:32px;
 //Btn
 
 @mixin button-primary-border-index {
-    width: 120px;
+    width: 200px;
     height: 50px;
     font-size: 18px;
     color: $primary;
@@ -30,7 +30,7 @@ $text_titile:32px;
     background-color: $primary;
     color: #fff;
     text-align: center;
-    line-height: 40px;
+    line-height: 42px;
     border: 0px;
     cursor: pointer;
 }
@@ -57,6 +57,17 @@ $text_titile:32px;
 
 @mixin phone{
     @media (max-width:512px) {
+        @content;
+    }   
+}
+
+@mixin phone-sm{
+    @media (max-width:460px) {
+        @content;
+    }   
+}
+@mixin phone-s{
+    @media (max-width:412px) {
         @content;
     }   
 }
