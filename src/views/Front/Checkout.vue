@@ -190,7 +190,7 @@ h4.en-font{
   width: 360px;
   height: 2px;
   position: absolute;
-  left: calc(50% - 176px);
+  left: calc(50% - 185px);
   top: 15px;
   z-index: 0;
   background-color: #ddd;

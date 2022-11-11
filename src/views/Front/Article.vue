@@ -1,8 +1,10 @@
 <template>
   <CustomLoading :active="isLoading"></CustomLoading>
   <div class="container-fluid d-flex align-items-center justify-content-center px-0">
-    <p class="en-font title fs-3-lg fs-4-md mb-0">關於我們</p>
-    <p class="content en-font">以瑞典當地自然環境為風格啟發，揀選天然有機原料，堅持只給最好的。</p>
+    <div class="content-area">
+      <p class="en-font title text-center fs-3-lg fs-4-md mb-0">關於我們</p>
+      <p class="content en-font  text-center " >以瑞典當地自然環境為風格啟發，揀選天然有機原料，堅持只給最好的。</p>
+    </div>
     <img src="@/assets/img/Article/About.png" class="d-lg-block d-none w-100" alt="banner" >
     <img src="@/assets/img/Index/Carousel/03-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
     <img src="@/assets/img/Index/Carousel/03-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
@@ -67,10 +69,7 @@ export default {
 <style scoped lang="scss">
 @import '@/assets/scss/main.scss';
 .title{
-  position: absolute;
-  z-index: 2;
   font-size: $text_titile;
-
   @include phone{
     font-size: 20px;
   }
@@ -80,13 +79,17 @@ export default {
     font-size: 18px;
   }
 }
-p.content{
+.content-area{
   position: absolute;
+  margin-top: 50px;
+  @include xl-screen{
+    margin-top: 80px;
+  }
+}
+.content{
   z-index: 2;
   font-size: 18px;
-  margin-top: 120px;
   text-align: center;
-  width: 80%;
   @include pad{
     font-size: 16px;
     padding: 0 50px;

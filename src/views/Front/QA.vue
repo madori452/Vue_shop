@@ -32,6 +32,9 @@
   z-index: 2;
   margin-top: 40px;
   font-size: $text_titile;
+  @include  xl-screen{
+    margin-top: 80px;
+  }
   @include phone{
     font-size: 20px;
   }

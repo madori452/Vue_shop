@@ -258,7 +258,10 @@ export default {
   position: absolute;
   z-index: 2;
   font-size: $text_titile;
-
+  top: calc(50% - 220px);
+  @mixin xl-screen{
+    top:150px
+  }
   @include pad{
     background-color: #ffffff82;
     padding: 10px;
