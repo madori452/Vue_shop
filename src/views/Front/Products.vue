@@ -53,7 +53,7 @@
                         <i class="bi bi-heart"></i>
                       </span>
                     </button>
-                    <button type="button" class="rounded-0 py-0 col-6 btn btn-cart btn-outline-primary ms-1" :class="{'disabled':this.status.loadingItem===item.id}"
+                    <button type="button" class="rounded-0 py-0 col-6 btn btn-cart btn-outline-primary ms-1" :class="{'disabled':status.loadingItem===item.id}"
                           @click="addCart(item.id)" >
                         <i class="bi bi-cart3 p-0"></i>
                     </button>

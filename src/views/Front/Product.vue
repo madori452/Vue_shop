@@ -44,8 +44,8 @@
             </div>
             <div class="col-sm-4 px-2">
               <button type="button" class="rounded-0 btn btn-primary text-white px-3 add-btn"
-                    @click="addCart(product.id)" :disabled="this.status.loadingItem===product.id">
-                <span v-if="this.status.loadingItem===product.id" class="spinner-grow spinner-grow-sm " role="status" aria-hidden="true"></span>
+                    @click="addCart(product.id)" :disabled="status.loadingItem===product.id">
+                <span v-if="status.loadingItem===product.id" class="spinner-grow spinner-grow-sm " role="status" aria-hidden="true"></span>
                  加到購物車
               </button>
             </div>
