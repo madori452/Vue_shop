@@ -1,5 +1,5 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/Vue_shop/' : '/',
+  publicPath: '/Vue_shop/dist',
   css: {
     loaderOptions: {
       sass: {
