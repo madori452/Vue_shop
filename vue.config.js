@@ -1,11 +1,9 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/Vue_shop/' : '/',
+  publicPath: '/Vue_shop/dist',
   css: {
     loaderOptions: {
       sass: {
-        prependData: `
-           @import "@/assets/scss/main.scss";
-        `
+        prependData: '\n           @import "@/assets/scss/main.scss";\n        '
       }
     }
   }
