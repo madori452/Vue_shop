@@ -170,7 +170,6 @@ export default {
     },
     // 加入收藏
     addFavorite (data) {
-      console.log(this.myFavorite)
       this.myFavorite = storageMethods.getLikeItem() || []
       if (JSON.stringify(this.myFavorite).includes(data.id)) {
         this.myFavorite.forEach((item, index) => {
