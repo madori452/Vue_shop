@@ -1,5 +1,5 @@
 <template>
-  <nav aria-label="Page navigation example" >
+  <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
       <li class="page-item me-2" @click.prevent="updatePage(pages.current_page-1)">
         <a class="page-link" href="#" aria-label="Previous">

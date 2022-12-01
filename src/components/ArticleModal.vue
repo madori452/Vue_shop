@@ -26,7 +26,7 @@
                 />
                 <input type="file" ref="fileInput" class="form-control" id="image" @change="uploadFile">
               </div>
-              <img class="img-fluid" :src="tempArticle.image" alt="" />
+              <img class="img-fluid" :src="tempArticle.image"/>
             </div>
             <div class="col-sm-8">
               <div class="mb-3">
@@ -143,7 +143,6 @@ export default {
   mixins: [modalMixin],
   inject: ['emitter'],
   watch: {
-    // 監聽props傳入的article內容是否有變動
     article () {
       this.tempArticle = this.article
     }

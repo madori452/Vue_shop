@@ -1,15 +1,15 @@
 <template>
   <div style="z-index: 1500">
-    <Toast v-for="(msg, key) in messages" :key="key"
+    <ToastContent v-for="(msg, key) in messages" :key="key"
       :msg="msg"
     />
   </div>
 </template>
 
 <script>
-import Toast from '@/components/Toast.vue'
+import ToastContent from '@/components/ToastContent.vue'
 export default {
-  components: { Toast },
+  components: { ToastContent },
   data () {
     return {
       messages: []

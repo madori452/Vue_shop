@@ -1,5 +1,5 @@
 <template>
-  <div class="login  d-flex align-items-center justify-content-center flex-column">
+  <div class="login d-flex align-items-center justify-content-center flex-column">
     <div class="container">
       <form class="row justify-content-center en-font" @submit.prevent="signIn">
         <div class="col-md-6">
@@ -28,7 +28,6 @@
               required
             />
           </div>
-
           <div class="text-end mt-4">
             <input class="rounded-0 w-100 btn btn-lg btn-primary btn-block text-white" type="submit" value="Login">
           </div>
@@ -61,6 +60,7 @@ export default {
             icon: 'error',
             title: `${err.data.message}`
           })
+          this.isLoading = false
         })
     }
   }

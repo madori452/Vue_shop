@@ -13,7 +13,7 @@
     </thead>
     <tbody v-for="item in orders" :key="item.id">
       <tr>
-        <td>{{$filters.date(item.create_at)}} </td>
+        <td>{{$filters.date(item.create_at)}}</td>
         <td>{{item.user.email}}</td>
         <td>
           <li v-for="(product, i) in item.products" :key="i">
@@ -35,14 +35,14 @@
     </tbody>
   </table>
   <Pagination :pages="pagination" @emit-pages="getOrders"></Pagination>
-  <OrdertModal ref="orderModal" :order="tempOrder" @update="updatePaid" ></OrdertModal>
+  <OrderModal ref="orderModal" :order="tempOrder" @update="updatePaid" ></OrderModal>
   <DelModal :item="tempOrder" ref="delModal" @del-item="delOrder"></DelModal>
 </template>
 
 <script>
 import DelModal from '@/components/DelModal.vue'
 import Pagination from '@/components/Pagination.vue'
-import OrdertModal from '@/components/OrderModal.vue'
+import OrderModal from '@/components/OrderModal.vue'
 export default {
   data () {
     return {
@@ -56,7 +56,7 @@ export default {
   components: {
     DelModal,
     Pagination,
-    OrdertModal
+    OrderModal
   },
 
   inject: ['emitter'],
@@ -75,6 +75,7 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
     // 刪除視窗
@@ -98,10 +99,11 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
     // 開啟order Modal
-    openModal (isNew, item01) {
+    openModal (item01) {
       this.isNew = true
       this.tempOrder = { ...item01 }
       const orderComponent = this.$refs.orderModal
@@ -122,6 +124,7 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     }
 

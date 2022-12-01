@@ -2,45 +2,44 @@
   <div class="coupon position-fixed w-100">輸入 CDR5542 可以享受優惠85折喔！！</div>
   <nav class="navbar navbar-expand-md navbar-bg py-0 mb-3 position-fixed w-100">
     <div class="container">
-        <router-link to="../../user/index" class="mt-2" @click="closeNav">
-          <img src="@/assets/img/Nav/logo-bk.svg" alt="logo" class="logo">
-        </router-link>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
-        aria-expanded="false" aria-label="Toggle navigation" @click="openNav">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="navbar-collapse collapse"  id="navbarNavAltMarkup" :class="{ show : toggleNav }">
-          <div class="navbar-nav mt-2">
-            <router-link to="../../user/index" class="nav-link item " aria-current="page" @click="closeNav">首頁</router-link>
-            <router-link to="../../user/products" class="nav-link item" aria-current="page"  @click="closeNav">產品列表</router-link>
-            <router-link to="../../user/articles" class="nav-link item" aria-current="page"  @click="closeNav">品牌故事</router-link>
-          </div>
-          <div class="navbar-nav ms-auto">
-            <a href="#"  class="nav-link position-relative" aria-current="page"  @click.prevent="openCanvas" >
-              <div class="cart-icon">
-                <img src="@/assets/img/Nav/love.svg" alt="收藏">
-                <div v-if="myFavorite" class="tip02">{{ myFavorite.length }}</div>
-              </div>
-            </a>
-
-            <router-link to="../../user/cart" class="nav-link " aria-current="page"  @click="closeNav">
-              <div class="cart-icon" >
-                <img src="@/assets/img/Nav/chart.svg" alt="購物車" >
-                <div v-if="shoppingCart" class="tip01">{{ shoppingCart }}</div>
-              </div>
-            </router-link>
-          </div>
-         </div>
+      <router-link to="../../user/index" class="mt-2" @click="closeNav">
+        <img src="@/assets/img/Nav/logo-bk.svg" alt="logo" class="logo">
+      </router-link>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+      aria-expanded="false" aria-label="Toggle navigation" @click="openNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="navbar-collapse collapse" id="navbarNavAltMarkup" :class="{ show : toggleNav }">
+        <div class="navbar-nav mt-2">
+          <router-link to="../../user/index" class="nav-link item" aria-current="page" @click="closeNav">首頁</router-link>
+          <router-link to="../../user/products" class="nav-link item" aria-current="page" @click="closeNav">產品列表</router-link>
+          <router-link to="../../user/articles" class="nav-link item" aria-current="page" @click="closeNav">品牌故事</router-link>
+        </div>
+        <div class="navbar-nav ms-auto">
+          <a href="#" class="nav-link position-relative" aria-current="page" @click.prevent="openCanvas">
+            <div class="cart-icon">
+              <img src="@/assets/img/Nav/love.svg" alt="收藏">
+              <div v-if="myFavorite" class="tip02">{{ myFavorite.length }}</div>
+            </div>
+          </a>
+          <router-link to="../../user/cart" class="nav-link" aria-current="page" @click="closeNav">
+            <div class="cart-icon">
+              <img src="@/assets/img/Nav/chart.svg" alt="購物車">
+              <div v-if="shoppingCart" class="tip01">{{ shoppingCart }}</div>
+            </div>
+          </router-link>
+        </div>
+      </div>
     </div>
   </nav>
-  <Canvas ref="canvas"></Canvas>
+  <CanvasModal ref="canvas"></CanvasModal>
 </template>
 
 <script>
-import Canvas from '@/components/front/Canvas.vue'
+import CanvasModal from '@/components/front/CanvasModal.vue'
 export default {
   components: {
-    Canvas
+    CanvasModal
   },
   data () {
     return {
@@ -51,7 +50,6 @@ export default {
   },
   inject: ['emitter'],
   emits: ['shopping-cart'],
-  // 取得購物車列表
   methods: {
     openCanvas () {
       const data = JSON.parse(localStorage.getItem('MyFavorite')) || []
@@ -62,11 +60,9 @@ export default {
     },
     getCart () {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
-      this.isLoading = true
       this.$http.get(url).then((res) => {
         this.cart = res.data.data
         this.shoppingCart = this.cart.carts.length
-        this.isLoading = false
       }).catch(err => {
         this.$swal({
           icon: 'error',
@@ -104,8 +100,6 @@ export default {
     this.getCart()
     this.getFavorite()
     this.scroll()
-
-    // 數量設定
     this.emitter.on('update-qty', () => {
       this.getCart()
     })
@@ -114,7 +108,6 @@ export default {
     })
   },
   unmounted () {
-    // 數量設定
     this.emitter.off('update-qty', () => {
       this.getCart()
     })
@@ -126,8 +119,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-@import "@/assets/scss/main.scss";
+<style lang="scss" scoped>
   .coupon{
     background-color: $primary;
     text-align: center;

@@ -2,7 +2,7 @@
   <CustomLoading :active="isLoading" />
   <!-- Banner -->
   <div class="container-fluid d-flex align-items-center justify-content-center px-0">
-    <h4 class="en-font">CART</h4>
+    <h4 class="en-font-title en-font">CART</h4>
     <img src="@/assets/img/Cart/banner-cart.png" class="d-lg-block d-none w-100" alt="banner">
     <img src="@/assets/img/Cart/cart-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
     <img src="@/assets/img/Cart/cart-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
@@ -14,7 +14,7 @@
       <div class="step-line mb-4">
         <ul class="col-12 d-flex ps-0 justify-content-center align-items-center en-font mx-auto">
           <li class="circle circle01 col-3">
-            <p class="num d-block mx-auto" :class="{primary:true}">1</p>
+            <p class="num d-block mx-auto" :class="{primaryStep:true}">1</p>
             <p class="step">確認訂單資訊</p>
           </li>
           <li class="circle circle01 col-3  offset-1">
@@ -28,7 +28,7 @@
         </ul>
       </div>
       <!-- 購物列表 -->
-      <div class="row mx-auto"  v-if="cart.carts">
+      <div class="row mx-auto" v-if="cart.carts">
           <!-- 購物車0-->
           <div class="col-lg-6 mx-auto text-center my-5 cart-none bg-white" v-if="cart.carts.length===0">
             <div class="go-shop mx-auto d-flex justify-content-center align-items-center flex-column">
@@ -103,7 +103,7 @@
               <div class="row w-100 m-0 coupon-code">
                 <div class="col-12 d-flex justify-content-end">
                     <input type="text" class="form-control d-inline-block" v-model="coupon_code" placeholder="請輸入優惠碼">
-                    <button class="btn btn-outline-secondary coupon d-inline-block ms-2 col-4" type="button" @click="addCouponCode">
+                    <button class="btn btn-outline-primary coupon d-inline-block ms-2 col-4" type="button" @click="addCouponCode">
                         套用優惠碼
                     </button>
                 </div>
@@ -113,60 +113,55 @@
           <!-- 表格 -->
           <div class="form-table-info col-xl-5 px-0"  v-if="cart.carts.length>=1">
             <div class="bg-white">
-                <div class="row">
-                  <Form class="col-md-12 d-flex justify-content-center flex-column form-order" @submit="createOrder"  v-slot="{ errors }">
-                    <p class="h5 en-font mt-5">訂購人資料</p>
-                    <hr />
-                    <div class="mb-3 mt-3">
-                      <label for="email" class="form-label">Email</label>
-                      <Field id="email" name="email" type="email" class="form-control"
-                                :class="{ 'is-invalid': errors['email'] }"
-                                placeholder="請輸入 Email" rules="email|required"
-                                v-model="form.user.email"></Field>
-                      <ErrorMessage name="email" class="invalid-feedback"></ErrorMessage>
-                    </div>
-
-                    <div class="mb-3">
-                      <label for="name" class="form-label">姓名</label>
-                      <Field id="name" name="姓名" type="text" class="form-control"
-                                :class="{ 'is-invalid': errors['姓名'] }"
-                                placeholder="請輸入姓名" rules="required"
-                                v-model="form.user.name"></Field>
-                      <ErrorMessage name="姓名" class="invalid-feedback"></ErrorMessage>
-                    </div>
-
-                    <div class="mb-3">
-                      <label for="tel" class="form-label">電話</label>
-                      <Field id="tel" name="電話" type="tel" class="form-control"
-                                :class="{ 'is-invalid': errors['電話'] }"
-                                placeholder="請輸入電話" rules="required"
-                                v-model="form.user.tel"></Field>
-                      <ErrorMessage name="電話" class="invalid-feedback"></ErrorMessage>
-                    </div>
-
-                    <div class="mb-3">
-                      <label for="address" class="form-label">地址</label>
-                      <Field id="address" name="地址" type="text" class="form-control"
-                                :class="{ 'is-invalid': errors['地址'] }"
-                                placeholder="請輸入地址" rules="required"
-                                v-model="form.user.address"></Field>
-                      <ErrorMessage name="地址" class="invalid-feedback"></ErrorMessage>
-                    </div>
-
-                    <div class="mb-3">
-                      <label for="message" class="form-label">留言</label>
-                      <textarea name="" id="message" class="form-control" cols="30" rows="2"
-                                v-model="form.message"></textarea>
-                    </div>
-                    <div class="text-end">
-                      <input type="submit" class="btn btn-primary w-100 mb-5 py-2 text-white rounded-0" value="送出訂單">
-                    </div>
-                  </Form>
+              <div class="row">
+                <Form class="col-md-12 d-flex justify-content-center flex-column form-order" @submit="createOrder"  v-slot="{ errors }">
+                  <p class="h5 en-font mt-5">訂購人資料</p>
+                  <hr />
+                  <div class="mb-3 mt-3">
+                    <label for="email" class="form-label">Email</label>
+                    <Field id="email" name="email" type="email" class="form-control"
+                              :class="{ 'is-invalid': errors['email'] }"
+                              placeholder="請輸入 Email" rules="email|required"
+                              v-model="form.user.email"></Field>
+                    <ErrorMessage name="email" class="invalid-feedback"></ErrorMessage>
+                  </div>
+                  <div class="mb-3">
+                    <label for="name" class="form-label">姓名</label>
+                    <Field id="name" name="姓名" type="text" class="form-control"
+                              :class="{ 'is-invalid': errors['姓名'] }"
+                              placeholder="請輸入姓名" rules="required"
+                              v-model="form.user.name"></Field>
+                    <ErrorMessage name="姓名" class="invalid-feedback"></ErrorMessage>
+                  </div>
+                  <div class="mb-3">
+                    <label for="tel" class="form-label">電話</label>
+                    <Field id="tel" name="電話" type="tel" class="form-control"
+                              :class="{ 'is-invalid': errors['電話'] }"
+                              placeholder="請輸入電話" rules="required"
+                              v-model="form.user.tel"></Field>
+                    <ErrorMessage name="電話" class="invalid-feedback"></ErrorMessage>
+                  </div>
+                  <div class="mb-3">
+                    <label for="address" class="form-label">地址</label>
+                    <Field id="address" name="地址" type="text" class="form-control"
+                              :class="{ 'is-invalid': errors['地址'] }"
+                              placeholder="請輸入地址" rules="required"
+                              v-model="form.user.address"></Field>
+                    <ErrorMessage name="地址" class="invalid-feedback"></ErrorMessage>
+                  </div>
+                  <div class="mb-3">
+                    <label for="message" class="form-label">留言</label>
+                    <textarea name="" id="message" class="form-control" cols="30" rows="2"
+                              v-model="form.message"></textarea>
+                  </div>
+                  <div class="text-end">
+                    <input type="submit" class="btn btn-primary w-100 mb-5 py-2 text-white rounded-0" value="送出訂單">
+                  </div>
+                </Form>
               </div>
             </div>
           </div>
       </div>
-
     </div>
   </div>
 </template>
@@ -195,8 +190,6 @@ export default {
 
   inject: ['emitter'],
   methods: {
-
-    // 取得購物車列表
     getCart () {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
       this.isLoading = true
@@ -205,7 +198,6 @@ export default {
         this.isLoading = false
       })
     },
-    // 監聽購物車變動
     updateCart (item) {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`
       this.isLoading = true
@@ -223,6 +215,7 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
     addCouponCode () {
@@ -238,6 +231,7 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
     removeCartItem (id) {
@@ -247,7 +241,6 @@ export default {
       this.$http.delete(url).then((res) => {
         this.status.loadingItem = ''
         this.emitter.emit('update-qty')
-
         this.$httpMessageState(res, '刪除購物車品項')
         this.getCart()
         this.isLoading = false
@@ -256,6 +249,7 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
     // 建立訂單
@@ -265,12 +259,14 @@ export default {
       this.$http.post(url, { data: order })
         .then((res) => {
           this.orderId = res.data.orderId
-          this.$router.push(`/checkout/${this.orderId}`)
+          this.$router.push({ path: `/checkout/${this.orderId}` })
+          // this.$router.push(`/checkout/${this.orderId}`)
         }).catch(err => {
           this.$swal({
             icon: 'error',
             title: `${err.data.message}`
           })
+          this.isLoading = false
         })
     },
     addNum (item) {
@@ -294,9 +290,8 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-@import '@/assets/scss/main.scss';
-h4.en-font{
+<style lang="scss">
+h4.en-font-title{
   position: absolute;
   z-index: 2;
   color: #fff;
@@ -308,10 +303,10 @@ h4.en-font{
 .step-line:after{
   display: block;
   content: '';
-  width: 360px;
+  width: 351px;
   height: 2px;
   position: absolute;
-  left: calc(50% - 185px);
+  left: calc(50% - 182px);
   top: 15px;
   z-index: 0;
   background-color: #ddd;
@@ -341,7 +336,7 @@ p.step{
 .step-line .step{
   text-align: center;
 }
-.step-line .num{
+.num{
   z-index: 1;
   position: relative;
   width: 30px;
@@ -358,8 +353,18 @@ p.step{
     font-size: 14px;
   }
 }
-.primary{
-  background-color: $primary ;
+.primaryStep{
+  background-color: $primary;
+  animation: step 1.5s infinite alternate;
+}
+
+@keyframes step{
+  0%{
+    box-shadow: 2px 2px 8px 6px #8077442b;
+  }
+  100%{
+    box-shadow: 2px 2px 8px 6px #80774454;
+  }
 }
 .remove-item{
   width: 10%;

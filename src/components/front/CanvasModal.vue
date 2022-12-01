@@ -1,31 +1,30 @@
 <template>
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"  ref="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title en-font mt-4" id="offcanvasRightLabel">我的最愛收藏</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body"  v-if="favoriteList.length!==0">
-            <div class="card card-list mt-3" v-for="item in favoriteList" :key="item.id">
-              <div class="row">
-                <div class="col-5 pe-0">
-                  <div class="bg-cover" :style="{backgroundImage:'url(' +item.imageUrl+ ')',height:'80px' }"></div>
-                </div>
-                <div class="col-6 px-0">
-                  <p class="list-title">{{ item.title }}</p>
-                </div>
-                <div class="col-1 px-0">
-                  <span @click="removeItem(item)">
-                    <i class="bi bi-x-square"></i>
-                  </span>
-                </div>
-
-              </div>
-            </div>
-        </div>
-        <div class="offcanvas-body" v-else>
-          <p>目前還沒有收藏喔！</p>
-        </div>
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"  ref="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title en-font mt-4" id="offcanvasRightLabel">我的最愛收藏</h5>
+      <button c type="button" class="btn-close h2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
+    <div class="offcanvas-body" v-if="favoriteList.length!==0">
+      <div class="card card-list mt-3" v-for="item in favoriteList" :key="item.id">
+        <div class="row">
+          <div class="col-5 pe-0">
+            <div class="bg-cover" :style="{backgroundImage:'url(' +item.imageUrl+ ')',height:'80px' }"></div>
+          </div>
+          <div class="col-5 px-0">
+            <p class="list-title">{{ item.title }}</p>
+          </div>
+          <div class="col-2 px-0">
+            <span @click="removeItem(item)" class="ms-3">
+              <i class="bi bi-x-square h3"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="offcanvas-body" v-else>
+      <p>目前還沒有收藏喔！</p>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -57,7 +56,6 @@ export default {
     getFavorite () {
       this.favoriteList = JSON.parse(localStorage.getItem('MyFavorite'))
     },
-
     // 移除喜愛項目
     removeItem (data) {
       this.myFavorite = storageMethods.getLikeItem() || []
@@ -74,7 +72,6 @@ export default {
       })
     }
   },
-
   mounted () {
     this.bsOffcanvas = new Offcanvas(this.$refs.offcanvasRight)
     this.getFavorite()
@@ -82,9 +79,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scpoed>
-@import '@/assets/scss/main.scss';
-
+<style lang="scss">
+*{
+  // border: 1px solid #ddd;
+}
     .offcanvas-backdrop{
         background-color: #0000006b;
     }

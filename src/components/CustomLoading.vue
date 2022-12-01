@@ -1,9 +1,6 @@
 <template>
   <transition name="fade">
-    <div
-      class="backgrounnd-loading"
-      v-if="active"
-    >
+    <div class="backgrounnd-loading" v-if="active">
     <div class="wrap">
       <div class="loading">
         <div class="bounceball"></div>
@@ -23,7 +20,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/scss/main.scss";
 body {
   position: fixed;
   width: 100%;

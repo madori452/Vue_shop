@@ -1,6 +1,6 @@
 <template>
-<!-- Modal -->
-<div class="modal fade" ref="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <!-- Modal -->
+  <div class="modal fade" ref="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content border-0">
         <div class="modal-header bg-dark text-white">
@@ -169,21 +169,16 @@
           </div>
         </div>
         <div class="modal-footer">
-
           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
             取消
           </button>
-          <button
-            type="button"
-            class="btn btn-primary"
-            @click="$emit('update-product', tempProduct)"
-          >
+          <button type="button" class="btn btn-primary" @click="$emit('update-product', tempProduct)">
             確認
           </button>
         </div>
       </div>
     </div>
-</div>
+  </div>
 </template>
 
 <script>

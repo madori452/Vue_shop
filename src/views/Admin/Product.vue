@@ -63,7 +63,6 @@ export default {
   },
   inject: ['emitter'],
   methods: {
-    // 取得資料
     getProducts (page = 1) {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/products/?page=${page}`
       this.isLoading = true
@@ -78,6 +77,7 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
     // 刪除資料
@@ -92,15 +92,14 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
-    // 開啟刪除 Modal
     opendelModal (item01) {
       this.tempProduct = { ...item01 }
       const delComponent = this.$refs.delModal
       delComponent.showModal()
     },
-    // 開啟Modal
     openModal (isNew, item01) {
       if (isNew) {
         this.tempProduct = {}
@@ -111,7 +110,6 @@ export default {
       const productComponent = this.$refs.productModal
       productComponent.showModal()
     },
-    // 傳送新增商品至後台
     updateProduct (item) {
       this.tempProduct = item
       // 新增
@@ -135,7 +133,6 @@ export default {
           this.emitter.emit('push-message', {
             style: 'danger',
             title: '更新失敗',
-            // 後端傳送
             content: res.data.message.join('、')
           })
         }
@@ -144,13 +141,12 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     }
   },
-
   created () {
     this.getProducts()
   }
-
 }
 </script>

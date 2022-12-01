@@ -26,7 +26,6 @@
                 <p>-常見問題</p>
               </router-link>
             </div>
-
             <div class="col-lg-3 col-xl-2">
               <h4 class="en-font">後台系統</h4>
               <router-link to="../../login"  class="nav-link " aria-current="page">
@@ -34,7 +33,6 @@
               </router-link>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -45,8 +43,7 @@
   </div>
 </template>
 
-<style scoped lang="scss">
-@import "@/assets/scss/main.scss";
+<style lang="scss">
   .footer{
     background-image: url('../../assets/img/Nav/footer.png');
     text-align: center;

@@ -1,11 +1,10 @@
 <template>
   <CustomLoading :active="isLoading" />
-  <div class="container-fluid d-flex align-items-center justify-content-center px-0"  data-aos="fade-up"  data-aos-duration="800" data-aos-once="true" data-aos-delay="300">
+  <div class="container-fluid d-flex align-items-center justify-content-center px-0" data-aos="fade-up" data-aos-duration="800" data-aos-once="true" data-aos-delay="300">
     <div class="content-area">
       <p class="en-font title text-center fs-3-lg fs-4-md mb-0">關於我們</p>
-      <p class="content en-font  text-center " >以瑞典當地自然環境為風格啟發，揀選天然有機原料，堅持只給最好的。</p>
+      <p class="content en-font  text-center">以瑞典當地自然環境為風格啟發，揀選天然有機原料，堅持只給最好的。</p>
     </div>
-
     <img src="@/assets/img/Article/About.png" class="d-lg-block d-none w-100" alt="banner">
     <img src="@/assets/img/Index/Carousel/03-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
     <img src="@/assets/img/Index/Carousel/03-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
@@ -25,10 +24,8 @@
             <router-link class="en-font h4 mask text-white text-left" :to="`/user/article/${ item.id }`">
               <button type="button" class="continue en-font h6">...繼續閱讀</button>
             </router-link>
-
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -58,6 +55,7 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     }
   },
@@ -68,7 +66,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/scss/main.scss';
 .title{
   font-size: $text_titile;
   @include phone{

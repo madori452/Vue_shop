@@ -1,6 +1,6 @@
 <template>
   <CustomLoading :active="isLoading" />
-  <div class="container-fluid d-flex align-items-center justify-content-center px-0"  data-aos="fade-up"  data-aos-duration="800" data-aos-once="true" data-aos-delay="600">
+  <div class="container-fluid d-flex align-items-center justify-content-center px-0" data-aos="fade-up" data-aos-duration="800" data-aos-once="true" data-aos-delay="600">
     <p class="en-font title fs-3-lg fs-4-md">所有產品</p>
     <img src="@/assets/img/Products/banner.png" class="d-lg-block d-none w-100" alt="Carousel01">
     <img src="@/assets/img/Index/Carousel/01-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
@@ -8,7 +8,7 @@
   </div>
   <div class="container pt-5">
     <div class="row">
-      <div class="col-md-3"  data-aos="fade-up"  data-aos-duration="800" data-aos-once="true" data-aos-delay="900">
+      <div class="col-md-3" data-aos="fade-up" data-aos-duration="800" data-aos-once="true" data-aos-delay="900">
         <!-- 篩選列表 -->
           <div class="list-group mt-4 en-font" >
             <a :class="{'active':productClass===''}"  @click.prevent="allProduct()" href="#" class="list-group-item list-group-item-action" aria-current="true">
@@ -21,11 +21,11 @@
 
       </div>
 
-      <div class="col-md-9 my-4"  data-aos="fade-up"  data-aos-duration="800" data-aos-once="true" data-aos-delay="900">
+      <div class="col-md-9 my-4" data-aos="fade-up" data-aos-duration="800" data-aos-once="true" data-aos-delay="900">
           <!-- 產品資料 -->
           <div class="row">
-            <div class="col-md-6 col-lg-4 px-md-2 px-4"   v-for="item in filterProduct" :key="item.id">
-              <div class="card rounded-0">
+            <div class="col-md-6 col-lg-4 px-md-2 px-4" v-for="item in filterProduct" :key="item.id">
+              <div class="card rounded-0 mb-3">
                 <div class="bg-image"
                 :style="{backgroundImage: `url(${item.imageUrl})`}">
                   <router-link class="en-font h4 mask text-white text-center position-absolute" :to="`/user/product/${ item.id }`">
@@ -33,7 +33,7 @@
                   </router-link>
                 </div>
                 <div class="card-body">
-                  <h5 class="card-title en-font text-hidden">{{ item.title }}</h5>
+                  <router-link class="text-decoration-none" :to="`/user/product/${ item.id }`"><h5 class="card-title en-font text-hidden">{{ item.title }}</h5></router-link>
                   <div class="h5" v-if="!item.price">{{ item.origin_price }} 元</div>
                   <div class="row">
                     <div class="col-5 pe-0">
@@ -53,20 +53,17 @@
                         <i class="bi bi-heart"></i>
                       </span>
                     </button>
-                    <button type="button" class="rounded-0 py-0 col-6 btn btn-cart btn-outline-primary ms-1" :class="{'disabled':status.loadingItem===item.id}"
-                          @click="addCart(item.id)" >
-                        <i class="bi bi-cart3 p-0"></i>
+                    <button type="button" class="rounded-0 py-0 col-6 btn btn-cart btn-outline-primary ms-1" :class="{'disabled':status.loadingItem===item.id}" @click="addCart(item.id)" >
+                      <i class="bi bi-cart3 p-0"></i>
                     </button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          <!-- 產品資料 end-->
       </div>
     </div>
-    <Pagination  v-if="productClass ===''" class="my-5" :pages="pagination" :product-class="productClass" @emit-pages="getProductPage" ></Pagination>
+    <Pagination v-if="productClass ===''" class="my-5" :pages="pagination" :product-class="productClass" @emit-pages="getProductPage" ></Pagination>
   </div>
 </template>
 
@@ -100,7 +97,7 @@ export default {
   },
   inject: ['emitter'],
   computed: {
-    filterProduct: function () {
+    filterProduct () {
       return this.products.filter(item => item.category.match(this.productClass))
     }
   },
@@ -118,6 +115,7 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
 
@@ -133,7 +131,6 @@ export default {
           this.products.filter(item => {
             if (this.productFilter.indexOf(item.category) === -1) {
               this.productFilter.push(item.category)
-              console.log(this.productFilter, 'filter')
             }
           })
         }
@@ -142,6 +139,7 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
     allProduct () {
@@ -201,9 +199,9 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
-    // 取得購物車列表
     getCart () {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart`
       this.$http.get(url).then((res) => {
@@ -213,9 +211,9 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
-    // 監聽購物車變動
     updateCart (item) {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${item.id}`
       this.isLoading = true
@@ -233,18 +231,17 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     }
-
   },
-
   created () {
     this.getCart()
     this.getProducts()
     this.getProductPage()
     this.getFavorite()
     this.emitter.emit('favorite-qty', this.myFavorite)
-    this.emitter.on('remove-data', (data) => {
+    this.emitter.on('remove-data', () => {
       this.getFavorite()
     })
   }
@@ -253,7 +250,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/scss/main.scss';
 .title{
   position: absolute;
   z-index: 2;

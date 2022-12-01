@@ -1,11 +1,19 @@
 <template>
   <router-view/>
-  <Top></Top>
+  <GoTop></GoTop>
 </template>
 
+<script>
+import GoTop from './components/front/GoTop.vue'
+export default {
+  components: {
+    GoTop
+  }
+}
+</script>
+
 <style lang="scss">
-@import "./assets/all.scss";
-@import"./assets/scss/main.scss";
+@import "./assets/scss/all";
 @import url('https://fonts.googleapis.com/css2?family=Rufina&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap');
 body{
@@ -13,9 +21,6 @@ body{
   background-color: $secondary;
   color: $text_bk;
   overflow-x: hidden;
-}
-*{
-  // border: 1px solid #ddd;
 }
 .modal-backdrop{
   background-color: #0303039c;
@@ -33,12 +38,3 @@ body{
   margin-top: 100px;
 }
 </style>
-
-<script>
-import Top from '../src/components/front/Top.vue'
-export default {
-  components: {
-    Top
-  }
-}
-</script>

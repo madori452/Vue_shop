@@ -2,33 +2,32 @@
   <Loading :active="isLoading"/>
   <button @click="openModal(true)" class="btn btn-primary px-5 rounded-0 text-white mt-3" type="button">新增文章</button>
   <table class="table mt-4">
-      <thead>
+    <thead>
+    <tr>
+      <th>文章標題</th>
+      <th>文章作者</th>
+      <th>創建日期</th>
+      <th>文章分類</th>
+      <th>是否公開</th>
+      <th>編輯</th>
+    </tr>
+    </thead>
+    <tbody v-for="item in articles" :key="item.title">
       <tr>
-        <th>文章標題</th>
-        <th>文章作者</th>
-        <th>創建日期</th>
-        <th>文章分類</th>
-        <th>是否公開</th>
-        <th>編輯</th>
+        <td>{{ item.title }}</td>
+        <td>{{ item.author }}</td>
+        <td>{{ item.create_at }}</td>
+        <td>{{ item.tag }}</td>
+        <td>
+        <li v-if="item.isPublic===true">是</li>
+        <li v-else>否</li>
+        </td>
+        <td>
+          <button  @click="openModal(false,item)" type="button"  class="btn btn-outline-primary btn-sm">檢視</button>
+          <button @click="opendelModal(item)" type="button" class="btn btn-outline-danger btn-sm">刪除</button>
+        </td>
       </tr>
-      </thead>
-      <tbody v-for="item in articles" :key="item.title">
-        <tr>
-          <td>{{ item.title }}</td>
-          <td>{{ item.author }}</td>
-          <td>{{ item.create_at }}</td>
-          <td>{{ item.tag }}</td>
-          <td>
-          <li v-if="item.isPublic===true">是</li>
-          <li v-else>否</li>
-          </td>
-
-          <td>
-            <button  @click="openModal(false,item)" type="button"  class="btn btn-outline-primary btn-sm">檢視</button>
-            <button @click="opendelModal(item)" type="button" class="btn btn-outline-danger btn-sm">刪除</button>
-          </td>
-        </tr>
-      </tbody>
+    </tbody>
   </table>
   <Pagination :pages="pagination" @emit-pages="getArticles"></Pagination>
   <ArticleModal ref="articleModal" :article="tempArticle" @update="updateArticle" ></ArticleModal>
@@ -39,7 +38,6 @@
 import DelModal from '@/components/DelModal.vue'
 import Pagination from '@/components/Pagination.vue'
 import ArticleModal from '@/components/ArticleModal.vue'
-
 export default {
   data () {
     return {
@@ -58,8 +56,6 @@ export default {
 
   inject: ['emitter'],
   methods: {
-
-    // 取得所有文章
     getArticles (page = 1) {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/articles/?page=${page}`
       this.isLoading = true
@@ -72,9 +68,9 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
-    // 刪除資料
     delArticle () {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/article/${this.tempArticle.id}`
       this.$http.delete(url).then((res) => {
@@ -86,15 +82,14 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
-    // 開啟刪除 Modal
     opendelModal (item01) {
       this.tempArticle = { ...item01 }
       const delComponent = this.$refs.delModal
       delComponent.showModal()
     },
-    // 取得單一文章
     getArticle (item) {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/article/${item.id}`
       this.isLoading = true
@@ -108,9 +103,9 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
-    // 開啟Article Modal
     openModal (isNew, item01) {
       if (isNew) {
         this.tempArticle = {}
@@ -122,7 +117,6 @@ export default {
       const articleComponent = this.$refs.articleModal
       articleComponent.showModal()
     },
-    // 傳送新增文章至後台
     updateArticle (item) {
       this.tempArticle = item
       // 新增
@@ -155,6 +149,7 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     }
 

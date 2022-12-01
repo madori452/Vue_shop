@@ -1,55 +1,65 @@
 <template>
   <CustomLoading :active="isLoading"/>
   <div class="container">
-    <!-- 產品簡述   -->
     <div class="row info-row">
       <div class="col-lg-7">
         <div class="card-product" :style="{backgroundImage:'url('+imgUrl+')',height:'500px',backgroundSize: 'cover', backgroundPosition:'center 50%'}"></div>
       </div>
       <div class="col-lg-5 d-flex flex-column">
         <p class="h6 type mt-lg-0 mt-3">{{ product.category }}</p>
-        <nav aria-label="breadcrumb ">
+        <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
-            <li class="breadcrumb-item "><router-link to="/user/products" class="text-black-50 text-decoration-none">所有產品</router-link></li>
+            <li class="breadcrumb-item"><router-link to="/user/products" class="text-black-50 text-decoration-none">所有產品</router-link></li>
             <li class="breadcrumb-item active text-black-50 fw-bolder" aria-current="page">{{ product.title }}</li>
           </ol>
         </nav>
         <p class="h4 mb-3 en-font title">{{ product.title }}</p>
         <p class="h5 text-primary">特惠價 NT {{ product.price }}</p>
-
         <div class="row text-black-80 px-2">
           <p class="h6 mt-4">商品敘述</p>
           <hr>
           <p class="h6">{{ produtContent }}</p>
         </div>
         <!-- 數量 -->
-        <div class="num-select">
+        <div class="num-select ms-2">
           <label for="productNum"> 數量</label>
           <div class="row mb-3 mt-2">
-            <div class="col-sm-8">
+            <div class="col-sm-5">
               <div class="mx-auto">
                 <div class="row px-2">
                   <button type="button button-count"  @click="addNum"
-                      class="btn btn-primary btn-sm rounded-0 col-2">
-                    <i class="bi bi-plus text-white h4"></i>
+                      class="py-0 btn btn-primary btn-sm rounded-0 col-3">
+                    <i class="bi bi-plus text-white h5"></i>
                   </button>
-                  <input class="col-8 button-count bg-transparent qty_input border-2 pt-1 text-center px-3" v-model="productCount" id="productNum" min="1">
+                  <input class="col-6 button-count bg-transparent qty_input border-2 pt-1 text-center px-3" v-model="productCount" id="productNum" min="1">
                   <button type="button button-count" @click="reduceNum"
-                      class="col-2 btn btn-primary btn-sm rounded-0">
-                      <i class="bi bi-dash-lg text-white h4"></i>
+                      class="py-0 col-3 btn btn-primary btn-sm rounded-0">
+                      <i class="bi bi-dash-lg text-white h5"></i>
                   </button>
                 </div>
 
               </div>
             </div>
-            <div class="col-sm-4 px-2">
-              <button type="button" class="rounded-0 btn btn-primary text-white px-3 add-btn"
-                    @click="addCart(product.id)" :disabled="status.loadingItem===product.id">
-                <span v-if="status.loadingItem===product.id" class="spinner-grow spinner-grow-sm " role="status" aria-hidden="true"></span>
-                 加到購物車
-              </button>
+            <div class="col-sm-7 px-0">
+              <div class="row">
+                <div class="col-md-6 px-4 px-sm-2">
+                  <button type="button" class="ms-0 ms-sm-2 rounded-0 btn btn-primary text-white add-btn"
+                        @click="addCart(product.id)" :disabled="status.loadingItem===product.id">
+                    <span v-if="status.loadingItem===product.id" class="spinner-grow spinner-grow-sm " role="status" aria-hidden="true"></span>
+                    <i class="bi bi-cart3 p-0 h5"></i>
+                    加入購物車
+                  </button>
+                </div>
+                <div class="col-md-6 px-4 ps-sm-1 pe-sm-2">
+                  <button type="button" class="ms-0 ms-sm-2 rounded-0 btn btn-outline-primary text-primary add-btn add-favorite"
+                        @click="addFavorite(product)" :disabled="status.loadingItem===product.id">
+                    <span  v-if="JSON.stringify(myFavorite).includes(product.id)"><i class="bi bi-heart-fill p-0 h5"></i></span>
+                    <span v-else><i class="bi bi-heart p-0 h5"></i></span>
+                    加入收藏
+                  </button>
+                </div>
+              </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -83,7 +93,6 @@
             <p class="mt-1">
               線上購物退貨僅提供全訂單退貨，恕不接受商品部份退貨，並且退回商品必須是全新狀態且保持包裝完整，否則恕不接受退換貨。若商品因消費者個人不當使用拆卸產生人為因素造成故障、毀損、磨損、擦傷、刮傷、髒污、包裝破損不完整者，或是配件不齊者，恕不接受退貨。<br/>
               只要您符合下述條件其中一項就可以無條件退貨：<br/><br/>
-
               <span class="mt-1"><i class="bi bi-circle"></i>實際收到的商品與所訂購商品不符合<br/></span>
               <span class="pt-2"><i class="bi bi-circle"></i>產品包裝內配件不齊全或商品規格與外包裝說明不符合<br/></span>
               <span class="pt-2"><i class="bi bi-circle"></i>如商品超過鑑賞期欲辦理退換貨者，恕不受理</span>
@@ -114,6 +123,11 @@
 </template>
 
 <script>
+const storageMethods = {
+  getLikeItem () {
+    return JSON.parse(localStorage.getItem('MyFavorite'))
+  }
+}
 export default {
   data () {
     return {
@@ -127,11 +141,11 @@ export default {
       produtContent: '',
       status: {
         loadingItem: '' // 對應品項id
-      }
+      },
+      myFavorite: storageMethods.getLikeItem() || []
     }
   },
   inject: ['emitter'],
-
   methods: {
     getProducts () {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/products/all`
@@ -147,7 +161,34 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
+    },
+    // 取得收藏
+    getFavorite () {
+      this.myFavorite = storageMethods.getLikeItem() || []
+    },
+    // 加入收藏
+    addFavorite (data) {
+      console.log(this.myFavorite)
+      this.myFavorite = storageMethods.getLikeItem() || []
+      if (JSON.stringify(this.myFavorite).includes(data.id)) {
+        this.myFavorite.forEach((item, index) => {
+          if (item.id === data.id) {
+            this.myFavorite.splice(index, 1)
+          }
+        })
+        const favoriteString = JSON.stringify(this.myFavorite)
+        localStorage.setItem('MyFavorite', favoriteString)
+        this.$swal({ icon: 'warning', title: '已從最愛中移除' })
+      } else {
+        this.myFavorite.push(data)
+        const dataString = JSON.stringify(this.myFavorite)
+        localStorage.setItem('MyFavorite', dataString)
+        this.myFavorite = JSON.parse(localStorage.getItem('MyFavorite'))
+        this.$swal({ icon: 'success', title: '儲存成功！' })
+      }
+      this.emitter.emit('favorite-qty')
     },
     recommend () {
       const arrSet = new Set([])
@@ -176,6 +217,7 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
     addCart (id) {
@@ -195,6 +237,7 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
     addNum () {
@@ -212,14 +255,17 @@ export default {
     this.id = this.$route.params.productId
     this.getProduct(this.id)
     this.getProducts()
+    this.getFavorite()
+    this.emitter.emit('favorite-qty', this.myFavorite)
+    this.emitter.on('remove-data', () => {
+      this.getFavorite()
+    })
   }
 
 }
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/scss/main.scss';
-
   .info-row{
     padding-top: 180px;
     @include phone{
@@ -263,6 +309,9 @@ input.qty_input{
     text-align: center;
     line-height: 26px;
   }
+  .btn:hover{
+    background-color: #80774480;
+  }
   .add-btn{
     font-size: 16px;
     width: 100%;
@@ -289,7 +338,7 @@ input.qty_input{
   }
   .card-title{
     font-size: 16px;
-    margin: 20px 0 0 10px;
+    margin: 20px 0;
   }
   .mask{
   top: 0;

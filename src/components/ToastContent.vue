@@ -3,9 +3,8 @@
     <button type="button" class="btn-close mb-0  ms-auto d-block" data-bs-dismiss="toast" aria-label="Close"></button>
     <div class="d-flex flex-column justify-content-center">
       <div class="toast-header bg-transparent border-0 mx-auto">
-        <i class="bi bi-check-circle-fill d-inline-block" :class="`text-${msg.style}`" ></i>
-        <!-- <span :class="`bg-${msg.style}`" class="p-2 rounded me-2 d-inline-block"></span> -->
-        <div class="me-auto toast-header bg-transparent border-0 w-100 ">{{ msg.title }}</div>
+        <i class="bi bi-check-circle-fill d-inline-block" :class="`text-${msg.style}`"></i>
+        <div class="me-auto toast-header bg-transparent border-0 w-100">{{ msg.title }}</div>
       </div>
       <div class="row text-muted mx-auto" v-if="msg.content">
           {{ msg.content }}

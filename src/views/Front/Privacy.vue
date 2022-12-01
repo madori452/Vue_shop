@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid d-flex align-items-center justify-content-center px-0">
     <p class="en-font title fs-3-lg fs-4-md mb-0">隱私政策</p>
-    <p class="content en-font ">為了讓您安心使用本網站的各項服務與資訊，特此向您說明本網站的隱私權政策</p>
+    <p class="content en-font">為了讓您安心使用本網站的各項服務與資訊，特此向您說明本網站的隱私權政策</p>
     <img src="@/assets/img/Policy/Policy.png" class="d-lg-block d-none w-100" alt="banner">
     <img src="@/assets/img/Policy/Policy-pd.png" class="d-md-block d-none d-lg-none w-100" alt="Carousel01">
     <img src="@/assets/img/Policy/Policy-mb.png" class="d-sm-block d-md-none w-100" alt="Carousel01">
@@ -30,7 +30,6 @@
 </template>
 
 <style scoped lang="scss">
-@import '@/assets/scss/main.scss';
 .title{
   position: absolute;
   z-index: 2;

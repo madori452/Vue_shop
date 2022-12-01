@@ -29,12 +29,12 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .top{
   width: 50px;
   position: fixed;
   right: 50px;
-  bottom: 80px;
+  bottom: 50px;
   cursor: pointer;
   transition: 0.5s;
   z-index: 999999;

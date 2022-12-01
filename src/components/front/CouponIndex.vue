@@ -10,11 +10,10 @@
         <div class="coupon-pic"></div>
       </div>
     </div>
-    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/main.scss";
 .coupon{
   width: 80%;
 }

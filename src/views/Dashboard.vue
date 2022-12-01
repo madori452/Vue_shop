@@ -1,8 +1,8 @@
 <template>
   <Navbar></Navbar>
   <div class="container-fluid px-5 pt-5 dashboard en-font">
-      <router-view/>
-      <ToastMessages></ToastMessages>
+    <router-view/>
+    <ToastMessages></ToastMessages>
   </div>
 </template>
 
@@ -24,7 +24,7 @@ export default {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)tracyToken\s*=\s*([^;]*).*$)|^.*$/, '$1')
     this.$http.defaults.headers.common.Authorization = token
     const api = `${process.env.VUE_APP_API}api/user/check`
-    this.$http.post(api, this.user).then((res) => {
+    this.$http.post(api).then((res) => {
       if (!res.data.success) {
         this.$router.push('/login')
       }
@@ -33,13 +33,13 @@ export default {
         icon: 'error',
         title: `${err.data.message}`
       })
+      this.isLoading = false
     })
   }
 }
 </script>
 
-<style scoped lang="scss">
-@import '../assets/scss/main.scss';
+<style lang="scss">
 html,body{
   height: 100%;
 }
@@ -51,6 +51,5 @@ html,body{
   height: 100vh;
   top:-20px;
   position: relative;
-
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <CustomLoading :active="isLoading"></CustomLoading>
+  <CustomLoading :active="isLoading" />
   <div class="container-fluid d-flex align-items-center justify-content-center px-0">
     <div class="content-area">
       <p class="en-font title text-center fs-3-lg fs-4-md mb-0">關於我們</p>
@@ -12,13 +12,17 @@
   <div class="container mx-auto py-4 mt-4">
     <nav aria-label="breadcrumb ">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item "><router-link to="/user/articles" class="text-black-50 text-decoration-none">所有文章</router-link></li>
+        <li class="breadcrumb-item ">
+          <router-link to="/user/articles" class="text-black-50 text-decoration-none">
+            所有文章
+          </router-link>
+        </li>
         <li class="breadcrumb-item active text-black-50 fw-bolder" aria-current="page">{{ article.title }}</li>
       </ol>
     </nav>
     <div class="row pb-5">
       <div class="col-lg-6">
-        <img :src="article.image" alt="product_pic" class="img-fluid" >
+        <img :src="article.image" alt="product_pic" class="img-fluid">
       </div>
       <div class="col-lg-6 all-content">
         <p class="tag en-font">{{ article.tag }}</p>
@@ -56,6 +60,7 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     }
   },
@@ -67,7 +72,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '@/assets/scss/main.scss';
 .title{
   font-size: $text_titile;
   @include phone{

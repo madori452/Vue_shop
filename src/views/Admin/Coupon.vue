@@ -1,9 +1,8 @@
 <template>
   <Loading :active="isLoading" />
   <button type="button" class="btn btn-primary px-5 rounded-0 text-white mt-2" @click="openCouponModal(true)">
-      建立新的優惠券
+    建立新的優惠券
   </button>
-
   <table class="table mt-4 container-fluid">
     <thead>
     <tr>
@@ -15,25 +14,23 @@
     </tr>
     </thead>
     <tbody v-for="(item, key) in coupons" :key="key">
-        <tr>
-        <td>{{ item.code }}</td>
-        <td>{{ item.percent }}%</td>
-        <td>{{ $filters.date(item.due_date) }}</td>
-
-        <td>
-            <span class="text-success" v-if="item.is_enabled==1">啟用</span>
-            <span class="text-muted" v-else>未啟用</span>
-        </td>
-        <td class="d-flex justify-content-center">
-            <div class="btn-group">
-            <button @click="openCouponModal(false, item)" type="button" class="btn btn-outline-primary btn-sm">編輯</button>
-            <button @click="openDelCouponModal(item)" type="button" class="btn btn-outline-danger btn-sm">刪除</button>
-            </div>
-        </td>
-        </tr>
+      <tr>
+      <td>{{ item.code }}</td>
+      <td>{{ item.percent }}%</td>
+      <td>{{ $filters.date(item.due_date) }}</td>
+      <td>
+        <span class="text-success" v-if="item.is_enabled==1">啟用</span>
+        <span class="text-muted" v-else>未啟用</span>
+      </td>
+      <td class="d-flex justify-content-center">
+        <div class="btn-group">
+          <button @click="openCouponModal(false, item)" type="button" class="btn btn-outline-primary btn-sm">編輯</button>
+          <button @click="openDelCouponModal(item)" type="button" class="btn btn-outline-danger btn-sm">刪除</button>
+        </div>
+      </td>
+      </tr>
     </tbody>
   </table>
-
   <CouponModal :coupon="tempCoupon" ref="couponModal" @update-coupon="updateCoupon"></CouponModal>
   <DelModal :item="tempCoupon" ref="delModal" @del-item="delCoupon"></DelModal>
 </template>
@@ -80,7 +77,6 @@ export default {
       const delComponent = this.$refs.delModal
       delComponent.showModal()
     },
-    // 取得資料
     getCoupons () {
       const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupons`
       this.isLoading = true
@@ -92,9 +88,9 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     },
-    // emit向外傳遞新增編輯
     updateCoupon (tempCoupon) {
       if (this.isNew) {
         const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon`
@@ -107,6 +103,7 @@ export default {
             icon: 'error',
             title: `${err.data.message}`
           })
+          this.isLoading = false
         })
       } else {
         const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${this.tempCoupon.id}`
@@ -119,10 +116,10 @@ export default {
             icon: 'error',
             title: `${err.data.message}`
           })
+          this.isLoading = false
         })
       }
     },
-    // 刪除優惠卷
     delCoupon () {
       const url = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/coupon/${this.tempCoupon.id}`
       this.isLoading = true
@@ -137,6 +134,7 @@ export default {
           icon: 'error',
           title: `${err.data.message}`
         })
+        this.isLoading = false
       })
     }
 
