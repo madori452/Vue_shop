@@ -1,5 +1,5 @@
 module.exports = {
-  publicPath: '/Vue_shop/',
+  publicPath: '/Vue_shop/dist/',
   css: {
     loaderOptions: {
       sass: {
