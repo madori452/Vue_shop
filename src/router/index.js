@@ -7,7 +7,6 @@ const routes = [
     name: 'Login',
     component: () => import('../views/Admin/Login')
   },
-
   {
     path: '/dashboard',
     name: 'Dashboard',
@@ -66,7 +65,6 @@ const routes = [
         path: 'article/:articleId',
         component: () => import('../views/Front/Article')
       },
-      // 用端隱私
       {
         path: 'privacy',
         component: () => import('../views/Front/Privacy')
